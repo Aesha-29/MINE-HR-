@@ -1,0 +1,21 @@
+import type { Request, Response } from "express";
+export declare const createShift: (req: Request, res: Response) => Promise<void>;
+export declare const getShifts: (_req: Request, res: Response) => Promise<void>;
+export declare const getShiftById: (req: Request, res: Response) => Promise<void>;
+export declare const updateShift: (req: Request, res: Response) => Promise<void>;
+export declare const deleteShift: (req: Request, res: Response) => Promise<void>;
+export declare const assignShift: (req: Request, res: Response) => Promise<void>;
+export declare const getAssignments: (req: Request, res: Response) => Promise<void>;
+export declare const deactivateAssignment: (req: Request, res: Response) => Promise<void>;
+export declare const createRotation: (req: Request, res: Response) => Promise<void>;
+export declare const getRotations: (_req: Request, res: Response) => Promise<void>;
+export declare const updateRotation: (req: Request, res: Response) => Promise<void>;
+export declare const deleteRotation: (req: Request, res: Response) => Promise<void>;
+export declare const getShiftStats: (_req: Request, res: Response) => Promise<void>;
+export declare const createShiftChangeRequest: (req: Request, res: Response) => Promise<void>;
+export declare const getShiftChangeRequests: (_req: Request, res: Response) => Promise<void>;
+export declare const updateShiftChangeStatus: (req: Request, res: Response) => Promise<void>;
+export declare const createPenaltyRule: (req: Request, res: Response) => Promise<void>;
+export declare const getPenaltyRules: (_req: Request, res: Response) => Promise<void>;
+export declare const deletePenaltyRule: (req: Request, res: Response) => Promise<void>;
+//# sourceMappingURL=shiftController.d.ts.map

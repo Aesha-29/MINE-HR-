@@ -1,0 +1,19 @@
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": MySQL database "minehr_db" at "gateway01.us-east-1.prod.aws.tidbcloud.com:4000"
+
+⚠️  There might be data loss when applying the changes:
+
+  • You are about to drop the `TaskSetting` table, which is not empty (1 rows).
+
+
+
+Your database is now in sync with your Prisma schema. Done in 35.09s
+
+Running generate... (Use --skip-generate to skip the generators)
+[2K[1A[2K[GRunning generate... - Prisma Client
+[2K[1A[2K[GEPERM: operation not permitted, rename 'C:\Users\Ash\OneDrive\Desktop\MINE-HR\ba
+ckend\node_modules\.prisma\client\query_engine-windows.dll.node.tmp21340' -> 
+'C:\Users\Ash\OneDrive\Desktop\MINE-HR\backend\node_modules\.prisma\client\query
+_engine-windows.dll.node'
+

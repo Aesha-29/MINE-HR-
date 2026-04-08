@@ -1,0 +1,10 @@
+node_modules/
+**/node_modules/
+.git/
+.vercel/
+.agents/
+.agent/
+.gemini/
+brain/
+# Removed restrictive ignores for remote build
+api/**/*.ts

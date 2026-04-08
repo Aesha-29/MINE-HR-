@@ -1,0 +1,9 @@
+import express from 'express';
+import { getDesignations, createDesignation, updateDesignation, bulkTransferDesignation } from '../controllers/designationController.js';
+const router = express.Router();
+router.get('/', getDesignations);
+router.post('/', createDesignation);
+router.put('/:id', updateDesignation);
+router.post('/bulk-transfer', bulkTransferDesignation);
+export default router;
+//# sourceMappingURL=designationRoutes.js.map

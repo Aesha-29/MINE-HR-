@@ -1,0 +1,28 @@
+{
+  "name": "minehrhrms",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "build": "npm run build:all",
+    "build:all": "npm run build -w backend && npm run build -w frontend",
+    "start": "npm run start -w backend",
+    "generate": "npm run generate -w backend",
+    "dev": "concurrently \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+    "postinstall": "npm run generate -w backend",
+    "deploy:prod": "npx vercel build --prod --yes --token vcp_1jXLLUstL7KmH61ZpypIkEyjCBORDGCOqNHkNdMu5uJ2wdZfPt2MutRi --scope aesha-29s-projects && npx vercel deploy --prebuilt --prod --yes --token vcp_1jXLLUstL7KmH61ZpypIkEyjCBORDGCOqNHkNdMu5uJ2wdZfPt2MutRi --scope aesha-29s-projects"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "prisma": "^6.19.2",
+    "typescript": "^5.9.3",
+    "tsx": "^4.21.0",
+    "@vercel/node": "^5.1.8"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}

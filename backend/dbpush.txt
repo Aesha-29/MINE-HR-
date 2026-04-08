@@ -1,0 +1,7 @@
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": MySQL database "minehr_db" at "gateway01.us-east-1.prod.aws.tidbcloud.com:4000"
+
+Error: P1001: Can't reach database server at `gateway01.us-east-1.prod.aws.tidbcloud.com:4000`
+
+Please make sure your database server is running at `gateway01.us-east-1.prod.aws.tidbcloud.com:4000`.

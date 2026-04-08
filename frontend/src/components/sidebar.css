@@ -1,0 +1,402 @@
+/* Base Sidebar Styles */
+.sidebar {
+    width: 250px;
+    min-width: 250px;
+    background: linear-gradient(180deg, #1e293b 0%, #0c121e 100%);
+    color: rgba(255, 255, 255, 0.9);
+    height: 100vh;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    z-index: 10;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
+    overflow-x: hidden;
+    overflow-y: auto;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+}
+
+/* Full Sidebar Gloss/Glaze Effect */
+.sidebar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.3), transparent 70%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 1;
+    display: block;
+}
+
+.sidebar.sidebar-hidden {
+    width: 0;
+    min-width: 0;
+    border-right: none;
+}
+
+/* Inner Wrapper to hold fixed width content */
+.sidebar-content-wrapper {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    overflow: visible;
+    position: relative;
+    z-index: 2;
+    padding-top: 0;
+}
+
+/* Header Section */
+.sidebar-header {
+    padding: 0;
+    margin: 0;
+}
+
+/* Custom Logo Styling */
+.sidebar-main-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sidebar-main-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-image {
+    width: 260px;
+    height: auto;
+    filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.3));
+    margin: -90px 0 -25px;
+    display: block;
+    position: relative;
+    top: 0;
+    left: -20px;
+}
+
+/* Company Info Box */
+.company-info-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: -35px 14px 0;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    color: #ffffff;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.company-icon {
+    color: #94a3b8;
+    flex-shrink: 0;
+}
+
+.company-name-text {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+}
+
+
+
+/* Menu Section */
+.sidebar-menu {
+    padding: 20px 16px;
+    flex: 1;
+}
+
+.menu-group-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 16px 0 8px 12px;
+    pointer-events: none;
+}
+
+.sidebar-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar-menu li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    cursor: pointer;
+    border-radius: 12px;
+    color: #94a3b8;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    margin-bottom: 4px;
+}
+
+.sidebar-menu li:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-menu li.active {
+    color: #ffffff;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.35) 0%, rgba(79, 70, 229, 0.15) 100%);
+    border: 1px solid rgba(165, 180, 252, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), inset 0 0 12px rgba(99, 102, 241, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* Shimmer/Gloss Animation */
+.sidebar-menu li {
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-menu li::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.15),
+            transparent);
+    transform: skewX(-25deg);
+    pointer-events: none;
+}
+
+.sidebar-menu li:hover::after,
+.sidebar-menu li.active::after {
+    animation: shine-premium 1.5s ease-in-out infinite;
+}
+
+@keyframes shine-premium {
+    0% {
+        left: -150%;
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.5;
+    }
+    90% {
+        opacity: 0.5;
+    }
+    100% {
+        left: 150%;
+        opacity: 0;
+    }
+}
+
+.menu-item-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 2;
+    flex: 1;
+    /* Take available width */
+    min-width: 0;
+    /* Allow shrinking for text wrap */
+    padding-right: 8px;
+    /* Space before arrow */
+}
+
+.menu-item-content span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.sidebar-menu li:hover span,
+.sidebar-menu li.active span {
+    color: #ffffff;
+}
+
+.menu-icon {
+    min-width: 18px;
+    height: 18px;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+    color: #cbd5e1;
+    flex-shrink: 0;
+    /* Don't shrink icon */
+}
+
+.sidebar-menu li:hover .menu-icon,
+.sidebar-menu li.active .menu-icon {
+    opacity: 1;
+    color: #ffffff;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4));
+}
+
+.arrow-icon {
+    color: #64748b;
+    transition: transform 0.2s ease;
+}
+
+.sidebar-menu li:hover .arrow-icon,
+.sidebar-menu li.active .arrow-icon {
+    color: #ffffff;
+}
+
+.arrow-icon.rotate-90 {
+    transform: rotate(90deg);
+}
+
+/* Refined Scrollbar for Dark Mode — scrollbar lives inside sidebar */
+.sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+/* ========================================================= */
+/*                EXACT SUBMODULE STYLING                   */
+/* ========================================================= */
+
+/* Submenu wrapper */
+.sidebar-menu .submenu-list {
+    list-style: none;
+    margin: 2px 0 10px 0;
+    padding: 0;
+    position: relative;
+}
+
+/* Vertical connecting line (UNCHANGED) */
+.sidebar-menu .submenu-list::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    bottom: 5px;
+    left: 23px;
+    /* Line stays same */
+    width: 1px;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Submenu item */
+.sidebar-menu .submenu-list li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 8px 14px 8px 90px;
+    /* Text moved more right */
+    margin: 0;
+    font-size: 13px;
+    font-weight: 400;
+    color: #94a3b8;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    min-height: auto;
+}
+
+/* Remove shimmer */
+.sidebar-menu .submenu-list li::after {
+    display: none;
+}
+
+/* Dot (moved right but line unchanged) */
+.sidebar-menu .submenu-list li .sub-dot {
+    position: absolute;
+    left: 70px;
+    /* Dot shifted right */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #94a3b8;
+    transition: all 0.2s ease;
+}
+
+/* Hover */
+.sidebar-menu .submenu-list li:hover {
+    color: #ffffff;
+}
+
+.sidebar-menu .submenu-list li:hover .sub-dot {
+    background: #e2e8f0;
+}
+
+/* Active sub */
+.sidebar-menu .submenu-list li.active-sub {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.sidebar-menu .submenu-list li.active-sub .sub-dot {
+    background: #818cf8;
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.7);
+}
+
+/* Parent highlight */
+.sidebar-menu li.active-parent {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+/* Smooth arrow rotation */
+.arrow-icon.rotate {
+    transform: rotate(90deg);
+}
+
+/* ========================================= */
+/* FORCE REMOVE GLASS HOVER FROM SUB ITEMS */
+/* ========================================= */
+
+.sidebar-menu .submenu-list li,
+.sidebar-menu .submenu-list li:hover,
+.sidebar-menu .submenu-list li.active-sub {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Disable shimmer animation */
+.sidebar-menu .submenu-list li::after,
+.sidebar-menu .submenu-list li:hover::after {
+    display: none !important;
+}
+
+/* Hover effect = ONLY text + darker dot */
+.sidebar-menu .submenu-list li:hover {
+    color: #ffffff !important;
+}
+
+.sidebar-menu .submenu-list li:hover .sub-dot {
+    background: #6b7280 !important;
+    /* darker grey */
+}

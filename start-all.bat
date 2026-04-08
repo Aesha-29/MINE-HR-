@@ -1,0 +1,9 @@
+@echo off
+echo Starting Backend...
+cd backend
+start "Backend" cmd /c "npm run dev"
+echo Starting Frontend...
+cd ../frontend
+start "Frontend" cmd /c "npm run dev"
+echo Both services starting...
+pause
