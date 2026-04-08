@@ -42,6 +42,12 @@ function Header({ toggleSidebar, isSidebarOpen, user, onLogout, notifications = 
         return () => window.removeEventListener('click', handleClickOutside);
     }, []);
 
+    const displayName = (() => {
+        if (!user) return "ash";
+        const rawName = user.name || [user.firstName, user.lastName].filter(Boolean).join(" ") || user.employeeId || user.email || "ash";
+        return String(rawName).toLowerCase();
+    })();
+
     return (
         <header className="header">
             {/* Left Group: Sidebar Toggle + Search */}
@@ -153,7 +159,7 @@ function Header({ toggleSidebar, isSidebarOpen, user, onLogout, notifications = 
                         </div>
                         <div className="user-info-text">
                             <span className="header-user-name">
-                                {user ? user.name.toLowerCase() : "ash"}
+                                {displayName}
                             </span>
                         </div>
                     </div>

@@ -1,113 +1,113 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "./components/header";
 import Sidebar from "./components/sidebar";
 import { ToastContainer } from "./components/Toast";
 import ModuleErrorBoundary from "./components/ModuleErrorBoundary";
 
-import Dashboard from "./pages/dashboard";
-import FinanceDashboard from "./pages/financeDashboard";
-import Employees from "./pages/employees";
-import AddEmployee from "./pages/addEmployee";
-import Onboarding from "./pages/onboarding";
-import ExEmployees from "./pages/exEmployees";
-import Managers from "./pages/managers";
-import ViewEmployee from "./pages/viewEmployee"; // NEW
-import Offboarding from "./pages/offboarding";
-import LevelMaster from "./pages/levelMaster";
-import LevelHierarchy from "./pages/levelHierarchy";
-import UpcomingRetirements from "./pages/upcomingRetirements";
-import ProfileChangeRequests from "./pages/profileChangeRequests"; // NEW
-import StructureManagement from "./pages/structureManagement";
-import Resignation from "./pages/resignation";
-import Promotion from "./pages/promotion"; // NEW
-import Login from "./pages/login";
-import AttendanceGrid from "./pages/attendanceGrid"; // NEW
-import PayrollDashboard from "./pages/payrollDashboard"; // NEW
-import BulkUpdate from "./pages/bulkUpdate"; // NEW
-import ManagerRole from "./pages/managerRole";
-import AssignLevel from "./pages/assignLevel";
-import ShiftManagement from "./pages/shiftManagement";
-import ShiftList from "./pages/shiftList";
-import ShiftAssignment from "./pages/shiftAssignment";
-import ShiftRotation from "./pages/shiftRotation";
-import ShiftCalendar from "./pages/shiftCalendar";
-import ShiftReports from "./pages/shiftReports";
-import LeaveTypes from "./pages/leaveTypes";
-import LeavePolicy from "./pages/leavePolicy";
-import LeaveBalance from "./pages/leaveBalance";
-import ApplyLeave from "./pages/applyLeave";
-import LeaveRequests from "./pages/leaveRequests";
-import LeaveApproval from "./pages/leaveApproval";
-import LeaveCalendar from "./pages/leaveCalendar";
-import LeaveReports from "./pages/leaveReports";
-import LeaveSettings from "./pages/leaveSettings";
-import LeaveReasons from "./pages/leaveReasons";
-import LeaveGroups from "./pages/leaveGroups";
-import AutoLeaves from "./pages/autoLeaves";
-import LeavePayouts from "./pages/leavePayouts";
-import ShortLeaves from "./pages/shortLeaves";
-import HolidayManagement from "./pages/holidayManagement";
-import ShiftPenaltyRules from "./pages/shiftPenaltyRules";
-import ShiftChangeRequests from "./pages/shiftChangeRequests";
-import HolidayExchangeRequests from "./pages/holidayExchangeRequests";
-import Templates from "./pages/Templates";
-import AddTemplate from "./pages/AddTemplate";
-import ManageTemplate from "./pages/ManageTemplate";
-import ManageTemplateQuestions from "./pages/ManageTemplateQuestions";
-import SalesDashboard from "./pages/SalesDashboard";
-import OrderSettings from "./pages/OrderSettings";
-import ManageArea from "./pages/ManageArea";
-import ManageCities from "./pages/ManageCities";
-import CountryList from "./pages/CountryList";
-import AssignedDistributors from "./pages/AssignedDistributors";
-import UnitMeasurement from "./pages/UnitMeasurement";
-import ViewOrders from "./pages/ViewOrders";
-import ManageProductStock from "./pages/ManageProductStock";
-import OrderRouteMap from "./pages/OrderRouteMap";
-import SalesSummaryReport from "./pages/SalesSummaryReport";
-import StockInOutReport from "./pages/StockInOutReport";
-import SalesDumpReport from "./pages/SalesDumpReport";
-import AvailableProductStockReport from "./pages/AvailableProductStockReport";
-import ManageRoute from "./pages/ManageRoute";
-import ManageEmployeeRoute from "./pages/ManageEmployeeRoute";
-import OrdersJobLocation from "./pages/OrdersJobLocation";
-import ProductCategory from "./pages/ProductCategory";
-import ProductSubCategory from "./pages/ProductSubCategory";
-import ManageProduct from "./pages/ManageProduct";
-import ManageProductVariant from "./pages/ManageProductVariant";
-import DailySalesReport from "./pages/DailySalesReport";
-import RetailerBeatPlan from "./pages/RetailerBeatPlan";
-import ManageRetailer from "./pages/ManageRetailer";
-import ManageDistributor from "./pages/ManageDistributor";
-import ManageSuperDistributor from "./pages/ManageSuperDistributor";
-import CustomerCategories from "./pages/CustomerCategories";
-import CustomerSubCategory from "./pages/CustomerSubCategory";
-import ExpenseCategories from "./pages/expenseCategories";
-import ExpenseSubCategories from "./pages/expenseSubCategories";
-import AssignVisitExpense from "./pages/assignVisitExpense";
-import ExpenseSettings from "./pages/expenseSettings";
+import Dashboard from "./pages/Dashboard/dashboard";
+import FinanceDashboard from "./pages/Dashboard/financeDashboard";
+import Employees from "./pages/HR/employees";
+import AddEmployee from "./pages/HR/addEmployee";
+import Onboarding from "./pages/HR/onboarding";
+import ExEmployees from "./pages/HR/exEmployees";
+import Managers from "./pages/Structure/managers";
+import ViewEmployee from "./pages/HR/viewEmployee"; // NEW
+import Offboarding from "./pages/HR/offboarding";
+import LevelMaster from "./pages/Structure/levelMaster";
+import LevelHierarchy from "./pages/Structure/levelHierarchy";
+import UpcomingRetirements from "./pages/HR/upcomingRetirements";
+import ProfileChangeRequests from "./pages/HR/profileChangeRequests"; // NEW
+import StructureManagement from "./pages/Structure/structureManagement";
+import Resignation from "./pages/HR/resignation";
+import Promotion from "./pages/HR/promotion"; // NEW
+import Login from "./pages/Auth/login";
+import AttendanceGrid from "./pages/HR/attendanceGrid"; // NEW
+import PayrollDashboard from "./pages/Dashboard/payrollDashboard"; // NEW
+import BulkUpdate from "./pages/HR/bulkUpdate"; // NEW
+import ManagerRole from "./pages/Structure/managerRole";
+import AssignLevel from "./pages/Structure/assignLevel";
+import ShiftManagement from "./pages/Shift/shiftManagement";
+import ShiftList from "./pages/Shift/shiftList";
+import ShiftAssignment from "./pages/Shift/shiftAssignment";
+import ShiftRotation from "./pages/Shift/shiftRotation";
+import ShiftCalendar from "./pages/Shift/shiftCalendar";
+import ShiftReports from "./pages/Shift/shiftReports";
+import LeaveTypes from "./pages/Leave/leaveTypes";
+import LeavePolicy from "./pages/Leave/leavePolicy";
+import LeaveBalance from "./pages/Leave/leaveBalance";
+import ApplyLeave from "./pages/Leave/applyLeave";
+import LeaveRequests from "./pages/Leave/leaveRequests";
+import LeaveApproval from "./pages/Leave/leaveApproval";
+import LeaveCalendar from "./pages/Leave/leaveCalendar";
+import LeaveReports from "./pages/Leave/leaveReports";
+import LeaveSettings from "./pages/Leave/leaveSettings";
+import LeaveReasons from "./pages/Leave/leaveReasons";
+import LeaveGroups from "./pages/Leave/leaveGroups";
+import AutoLeaves from "./pages/Leave/autoLeaves";
+import LeavePayouts from "./pages/Leave/leavePayouts";
+import ShortLeaves from "./pages/Leave/shortLeaves";
+import HolidayManagement from "./pages/Leave/holidayManagement";
+import ShiftPenaltyRules from "./pages/Shift/shiftPenaltyRules";
+import ShiftChangeRequests from "./pages/Shift/shiftChangeRequests";
+import HolidayExchangeRequests from "./pages/Leave/holidayExchangeRequests";
+import Templates from "./pages/Templates/Templates";
+import AddTemplate from "./pages/Templates/AddTemplate";
+import ManageTemplate from "./pages/Templates/ManageTemplate";
+import ManageTemplateQuestions from "./pages/Templates/ManageTemplateQuestions";
+import SalesDashboard from "./pages/Sales/SalesDashboard";
+import OrderSettings from "./pages/Sales/OrderSettings";
+import ManageArea from "./pages/Distribution/ManageArea";
+import ManageCities from "./pages/Distribution/ManageCities";
+import CountryList from "./pages/Distribution/CountryList";
+import AssignedDistributors from "./pages/Distribution/AssignedDistributors";
+import UnitMeasurement from "./pages/Products/UnitMeasurement";
+import ViewOrders from "./pages/Sales/ViewOrders";
+import ManageProductStock from "./pages/Products/ManageProductStock";
+import OrderRouteMap from "./pages/Sales/OrderRouteMap";
+import SalesSummaryReport from "./pages/Sales/SalesSummaryReport";
+import StockInOutReport from "./pages/Products/StockInOutReport";
+import SalesDumpReport from "./pages/Sales/SalesDumpReport";
+import AvailableProductStockReport from "./pages/Products/AvailableProductStockReport";
+import ManageRoute from "./pages/Distribution/ManageRoute";
+import ManageEmployeeRoute from "./pages/Distribution/ManageEmployeeRoute";
+import OrdersJobLocation from "./pages/Sales/OrdersJobLocation";
+import ProductCategory from "./pages/Products/ProductCategory";
+import ProductSubCategory from "./pages/Products/ProductSubCategory";
+import ManageProduct from "./pages/Products/ManageProduct";
+import ManageProductVariant from "./pages/Products/ManageProductVariant";
+import DailySalesReport from "./pages/Sales/DailySalesReport";
+import RetailerBeatPlan from "./pages/Distribution/RetailerBeatPlan";
+import ManageRetailer from "./pages/Distribution/ManageRetailer";
+import ManageDistributor from "./pages/Distribution/ManageDistributor";
+import ManageSuperDistributor from "./pages/Distribution/ManageSuperDistributor";
+import CustomerCategories from "./pages/Customer/CustomerCategories";
+import CustomerSubCategory from "./pages/Customer/CustomerSubCategory";
+import ExpenseCategories from "./pages/Expense/expenseCategories";
+import ExpenseSubCategories from "./pages/Expense/expenseSubCategories";
+import AssignVisitExpense from "./pages/Expense/assignVisitExpense";
+import ExpenseSettings from "./pages/Expense/expenseSettings";
 
 // Expense Module (new)
-import ManageExpenseTemplate from "./pages/manageExpenseTemplate";
-import AddExpense from "./pages/addExpense";
-import PendingExpense from "./pages/pendingExpense";
-import UnpaidExpense from "./pages/unpaidExpense";
-import PaidExpense from "./pages/paidExpense";
-import RejectedExpense from "./pages/rejectedExpense";
-import GroupWiseExpense from "./pages/groupWiseExpense";
-import DayWiseExpense from "./pages/dayWiseExpense";
-import ManageExpenseAdvance from "./pages/manageExpenseAdvance";
-import AdvanceExpenseRequest from "./pages/advanceExpenseRequest";
-import GenerateVoucher from "./pages/generateVoucher";
-import { PaidExpenseHistoryReport, EmployeeExpenseReport, UnpaidExpenseReport, ApprovedExpenseReport, AdvanceExpenseReport } from "./pages/expenseReports";
+import ManageExpenseTemplate from "./pages/Expense/manageExpenseTemplate";
+import AddExpense from "./pages/Expense/addExpense";
+import PendingExpense from "./pages/Expense/pendingExpense";
+import UnpaidExpense from "./pages/Expense/unpaidExpense";
+import PaidExpense from "./pages/Expense/paidExpense";
+import RejectedExpense from "./pages/Expense/rejectedExpense";
+import GroupWiseExpense from "./pages/Expense/groupWiseExpense";
+import DayWiseExpense from "./pages/Expense/dayWiseExpense";
+import ManageExpenseAdvance from "./pages/Expense/manageExpenseAdvance";
+import AdvanceExpenseRequest from "./pages/Expense/advanceExpenseRequest";
+import GenerateVoucher from "./pages/Expense/generateVoucher";
+import { PaidExpenseHistoryReport, EmployeeExpenseReport, UnpaidExpenseReport, ApprovedExpenseReport, AdvanceExpenseReport } from "./pages/Expense/expenseReports";
 
 // Advance Payments
-import AdvanceSalary from "./pages/advanceSalary";
-import BulkAdvanceSalary from "./pages/bulkAdvanceSalary";
-import AdvanceCarryForward from "./pages/advanceCarryForward";
-import AdvanceSalaryRequests from "./pages/advanceSalaryRequests";
-import AdvanceSalaryReport from "./pages/advanceSalaryReport";
+import AdvanceSalary from "./pages/AdvanceSalary/advanceSalary";
+import BulkAdvanceSalary from "./pages/AdvanceSalary/bulkAdvanceSalary";
+import AdvanceCarryForward from "./pages/AdvanceSalary/advanceCarryForward";
+import AdvanceSalaryRequests from "./pages/AdvanceSalary/advanceSalaryRequests";
+import AdvanceSalaryReport from "./pages/AdvanceSalary/advanceSalaryReport";
 
 // Task Sheet Module
 import TaskDashboard from "./pages/TaskSheet/TaskDashboard";
@@ -249,7 +249,7 @@ function App() {
     }
   }, []);
 
-  // 🔹 NEW: store selected employee for view/edit
+  // ðŸ”¹ NEW: store selected employee for view/edit
   const [selectedEmployee, setSelectedEmployee] = useState<any>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
   const [selectedShift, setSelectedShift] = useState<any>(null);
@@ -258,7 +258,7 @@ function App() {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-  // 🔹 Global Notifications
+  // ðŸ”¹ Global Notifications
   const [notifications, setNotifications] = useState<any[]>([
     { id: 1, text: "Leave Request Approved", time: "2h ago", type: "success" },
     { id: 2, text: "New Policy: Health Insurance", time: "5h ago", type: "info" },
