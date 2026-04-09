@@ -221,7 +221,7 @@ function Dashboard() {
                                 </div>
                             </div>
                             <div className="split-legend">
-                                {(stats?.deptData || deptData).map((dept: any, i: number) => (
+                                {deptData.map((dept: any, i: number) => (
                                     <div className="split-legend-item" key={i}>
                                         <div className="sl-left">
                                             <span className="sl-dot" style={{ backgroundColor: DEPT_COLORS[i % DEPT_COLORS.length] }}></span>
