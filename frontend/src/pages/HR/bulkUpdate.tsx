@@ -2,7 +2,8 @@ import React, { useState, useRef } from "react";
 import axios from "axios";
 import API_BASE from "../api";
 import "./bulkUpdate.css";
-import { Upload, Download, CheckCircle, FileSpreadsheet, ArrowRight, ArrowLeft } from "lucide-react";
+import { Upload, Download, CheckCircle, FileSpreadsheet, ArrowRight, ArrowLeft, Filter } from "lucide-react";
+import PageTitle from "../components/PageTitle";
 
 const UPDATE_TYPES = [
     "Job Information",
@@ -144,20 +145,34 @@ function BulkUpdate() {
     };
 
     return (
-        <div className="bulk-update-container fade-in">
+        <div className="bulk-update-container animate-fade-in">
             <div className="page-header">
-                <h2>Bulk Update Operations</h2>
-                <p>Modify multiple employee records simultaneously via CSV upload.</p>
+                <PageTitle 
+                    title="Bulk Operations" 
+                    subtitle="Effortlessly modify mass employee records via automated CSV workflows" 
+                />
             </div>
 
-            <div className="stepper-indicator">
-                <div className={`step ${step >= 1 ? 'active' : ''}`}>1. Select Type</div>
-                <div className="step-line"></div>
-                <div className={`step ${step >= 2 ? 'active' : ''}`}>2. Upload Data</div>
-                <div className="step-line"></div>
-                <div className={`step ${step >= 3 ? 'active' : ''}`}>3. Validate</div>
-                <div className="step-line"></div>
-                <div className={`step ${step >= 4 ? 'active' : ''}`}>4. Confirm</div>
+            <div className="wizard-nav glass-card mb-8 px-8 py-4">
+                <div className={`wizard-step ${step >= 1 ? 'active' : ''} ${step > 1 ? 'completed' : ''}`}>
+                    <div className="wizard-step-circle">1</div>
+                    <div className="wizard-step-label">Select Type</div>
+                    <div className="wizard-step-line"></div>
+                </div>
+                <div className={`wizard-step ${step >= 2 ? 'active' : ''} ${step > 2 ? 'completed' : ''}`}>
+                    <div className="wizard-step-circle">2</div>
+                    <div className="wizard-step-label">Upload CSV</div>
+                    <div className="wizard-step-line"></div>
+                </div>
+                <div className={`wizard-step ${step >= 3 ? 'active' : ''} ${step > 3 ? 'completed' : ''}`}>
+                    <div className="wizard-step-circle">3</div>
+                    <div className="wizard-step-label">Validate</div>
+                    <div className="wizard-step-line"></div>
+                </div>
+                <div className={`wizard-step ${step >= 4 ? 'active' : ''} ${step > 4 ? 'completed' : ''}`}>
+                    <div className="wizard-step-circle">4</div>
+                    <div className="wizard-step-label">Complete</div>
+                </div>
             </div>
 
             <div className="step-content-card">

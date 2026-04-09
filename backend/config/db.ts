@@ -4,9 +4,11 @@ let prisma: PrismaClient | null = null;
 
 export const getPrismaClient = (): PrismaClient => {
   if (!prisma) {
-    // TiDB Serverless requires sslaccept=strict parameter
-    const dbUrl = process.env.DATABASE_URL || 
-      "mysql://4579PdSAb7iFRRN.root:h6aPQzHNXtGIeVrM@gateway01.us-east-1.prod.aws.tidbcloud.com:4000/minehr_db?sslaccept=strict";
+    const dbUrl = process.env.DATABASE_URL;
+
+    if (!dbUrl) {
+      throw new Error("DATABASE_URL is required");
+    }
     
     // Ensure sslaccept=strict is included (TiDB-specific parameter)
     let finalUrl = dbUrl;

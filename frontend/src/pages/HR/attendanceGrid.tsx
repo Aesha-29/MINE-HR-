@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import API_BASE from "../api";
+import { ChevronLeft, ChevronRight, Download, Calendar as CalendarIcon, Clock, Filter } from "lucide-react";
 import "./attendanceGrid.css";
-import { ChevronLeft, ChevronRight, Download, Calendar as CalendarIcon, Clock } from "lucide-react";
+import PageTitle from "../components/PageTitle";
 
 function AttendanceGrid() {
     const [logs, setLogs] = useState<any[]>([]);
@@ -71,90 +72,113 @@ function AttendanceGrid() {
     };
 
     return (
-        <div className="attendance-grid-container fade-in">
-            <div className="header-actions">
-                <div>
-                    <h2 className="page-title"><Clock size={22} /> Attendance Tracking</h2>
-                    <p className="page-subtitle">Monthly timesheet overview</p>
-                </div>
-
-                <div className="month-selector">
-                    <button onClick={prevMonth} className="btn-icon">
-                        <ChevronLeft size={20} />
+        <div className="attendance-grid-container animate-fade-in">
+            <div className="page-header">
+                <PageTitle 
+                    title="Attendance Tracking" 
+                    subtitle="Monitor monthly timesheets and workforce availability" 
+                />
+                <div className="header-actions">
+                    <button className="btn btn-secondary">
+                        <Filter size={18} /> Filters
                     </button>
-                    <div className="current-month">
-                        <CalendarIcon size={18} />
-                        <span>
-                            {currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}
-                        </span>
-                    </div>
-                    <button onClick={nextMonth} className="btn-icon">
-                        <ChevronRight size={20} />
-                    </button>
-
-                    <button className="btn-secondary" style={{ marginLeft: "1rem" }}>
-                        <Download size={16} /> Export CSV
+                    <button className="btn btn-success">
+                        <Download size={18} /> Export CSV
                     </button>
                 </div>
             </div>
 
-            {loading ? (
-                <div className="loading-state">Loading attendance data...</div>
-            ) : employees.length === 0 ? (
-                <div className="empty-state">No attendance records found for this month.</div>
-            ) : (
-                <div className="grid-scroll-wrapper">
-                    <table className="attendance-table custom-table">
-                        <thead>
-                            <tr>
-                                <th className="sticky-col">Employee</th>
-                                {dayColumns.map(day => (
-                                    <th key={day} className="day-col">{day}</th>
-                                ))}
-                                <th className="total-col">Total<br />Days</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {employees.map(emp => {
-                                let totalPresent = 0;
-                                return (
-                                    <tr key={emp.employeeId}>
-                                        <td className="sticky-col employee-cell">
-                                            <div className="emp-info">
-                                                <span className="emp-name">{emp.firstName} {emp.lastName}</span>
-                                                <span className="emp-id">{emp.employeeId} • {emp.department}</span>
-                                            </div>
-                                        </td>
-
-                                        {dayColumns.map(day => {
-                                            const statusInfo = getStatusForDay(emp.employeeId, day);
-                                            if (statusInfo.status === 'Present') totalPresent += 1;
-                                            if (statusInfo.status === 'Half Day') totalPresent += 0.5;
-
-                                            return (
-                                                <td key={day} className="status-cell">
-                                                    <div className={`status-badge ${statusInfo.class}`} title={`${statusInfo.status} ${statusInfo.hours ? `(${statusInfo.hours} hrs)` : ''}`}>
-                                                        {statusInfo.label}
-                                                    </div>
-                                                </td>
-                                            );
-                                        })}
-
-                                        <td className="total-col summary-cell">
-                                            <strong>{totalPresent}</strong>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
+            <div className="glass-card mb-6 p-4">
+                <div className="flex justify-between items-center">
+                    <div className="flex gap-4">
+                        <div className="stat-mini">
+                            <span className="text-xs text-muted font-bold uppercase">Working Month</span>
+                            <div className="flex items-center gap-2 mt-1">
+                                <button onClick={prevMonth} className="act-btn view">
+                                    <ChevronLeft size={16} />
+                                </button>
+                                <div className="font-bold text-lg min-w-[150px] text-center">
+                                    {currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}
+                                </div>
+                                <button onClick={nextMonth} className="act-btn view">
+                                    <ChevronRight size={16} />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div className="legend-row mt-0">
+                        <div className="legend-item"><span className="status-badge completed">P</span> <span className="text-xs font-semibold">Present</span></div>
+                        <div className="legend-item"><span className="status-badge pending">HD</span> <span className="text-xs font-semibold">Half Day</span></div>
+                        <div className="legend-item"><span className="status-badge failed">A</span> <span className="text-xs font-semibold">Absent</span></div>
+                    </div>
                 </div>
-            )}
+            </div>
 
-            <div className="legend-pills mt-4">
-                <span className="pill status-present">P : Present</span>
-                <span className="pill status-half">HD : Half Day</span>
-                <span className="pill status-absent">A : Absent</span>
+            <div className="table-wrapper glass-card pb-0">
+                {loading ? (
+                    <div className="flex-col flex-center py-20">
+                        <div className="spinner mb-4"></div>
+                        <p className="text-muted">Compiling attendance logs...</p>
+                    </div>
+                ) : employees.length === 0 ? (
+                    <div className="flex-col flex-center py-20 text-muted">
+                        <CalendarIcon size={48} className="opacity-20 mb-4" />
+                        <p className="text-lg font-bold">No records found for this period</p>
+                    </div>
+                ) : (
+                    <div className="grid-scroll-wrapper">
+                        <table className="table-modern attendance-table-fixed">
+                            <thead>
+                                <tr>
+                                    <th className="sticky-col-left bg-slate-50">Employee</th>
+                                    {dayColumns.map(day => (
+                                        <th key={day} className="day-col-header text-center">{day}</th>
+                                    ))}
+                                    <th className="total-col-header text-center">Summary</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {employees.map(emp => {
+                                    let totalPresent = 0;
+                                    return (
+                                        <tr key={emp.employeeId}>
+                                            <td className="sticky-col-left employee-info-cell">
+                                                <div className="flex-col">
+                                                    <span className="font-bold text-slate-800 leading-tight">{emp.firstName} {emp.lastName}</span>
+                                                    <span className="text-[10px] text-muted font-mono">{emp.employeeId} • {emp.department}</span>
+                                                </div>
+                                            </td>
+
+                                            {dayColumns.map(day => {
+                                                const statusInfo = getStatusForDay(emp.employeeId, day);
+                                                if (statusInfo.status === 'Present') totalPresent += 1;
+                                                if (statusInfo.status === 'Half Day') totalPresent += 0.5;
+
+                                                const badgeClass = statusInfo.label === 'P' ? 'completed' : statusInfo.label === 'HD' ? 'pending' : 'failed';
+
+                                                return (
+                                                    <td key={day} className="text-center p-1">
+                                                        <div 
+                                                            className={`status-badge ${badgeClass} w-7 h-7 flex items-center justify-center p-0 text-[10px] m-auto cursor-help`}
+                                                            title={`${statusInfo.status} ${statusInfo.hours ? `(${statusInfo.hours} hrs)` : ''}`}
+                                                        >
+                                                            {statusInfo.label}
+                                                        </div>
+                                                    </td>
+                                                );
+                                            })}
+
+                                            <td className="text-center font-bold text-slate-900 bg-slate-50">
+                                                {totalPresent}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -1,0 +1,24 @@
+# Dependencies and caches
+**/node_modules
+**/.cache
+**/.turbo
+**/.next
+
+# Local/build artifacts
+.vercel
+frontend/dist
+backend/dist
+coverage
+
+# Logs and reports
+*.log
+*.txt
+backend/*.txt
+
+# Large generated Prisma artifacts not needed in source upload
+backend/src/generated/client/**
+
+# Local env files
+.env
+.env.*
+!.env.example

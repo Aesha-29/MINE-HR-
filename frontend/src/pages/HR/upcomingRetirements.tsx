@@ -3,6 +3,7 @@ import axios from "axios";
 import API_BASE from "../api";
 import { Search, Calendar, Download, Users } from "lucide-react";
 import "./upcomingRetirements.css";
+import PageTitle from "../components/PageTitle";
 
 function UpcomingRetirements() {
     const [retirements, setRetirements] = useState<any[]>([]);
@@ -79,58 +80,59 @@ function UpcomingRetirements() {
     };
 
     return (
-        <div className="retirements-container">
-            <div className="retirements-header">
-                <div>
-                    <h2 className="page-title">
-                        <Calendar size={22} />
-                        Upcoming Retirements
-                    </h2>
-                    <p>Monitor and manage employees approaching their retirement age for proactive planning.</p>
-                </div>
-                <button className="export-btn" onClick={handleExport}>
-                    <Download size={20} /> Export Report
-                </button>
-            </div>
-
-            <div className="filter-bar">
-                <div className="search-box">
-                    <Search size={18} className="search-icon" />
-                    <input
-                        type="text"
-                        placeholder="Search by Employee Name or ID..."
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-                </div>
-
-                <div className="filter-select">
-                    <select value={timeframe} onChange={(e) => setTimeframe(e.target.value)}>
-                        <option value="1">Within 1 Month</option>
-                        <option value="3">Within 3 Months</option>
-                        <option value="6">Within 6 Months</option>
-                        <option value="12">Within 1 Year</option>
-                        <option value="">All Time</option>
-                    </select>
-                </div>
-
-                <div className="filter-select">
-                    <select value={branchId} onChange={(e) => setBranchId(e.target.value)}>
-                        <option value="">All Branches</option>
-                        {branches.map(b => <option key={b.id} value={b.id}>{b.branchName}</option>)}
-                    </select>
-                </div>
-
-                <div className="filter-select">
-                    <select value={departmentId} onChange={(e) => setDepartmentId(e.target.value)}>
-                        <option value="">All Departments</option>
-                        {departments.map(d => <option key={d.id} value={d.id}>{d.departmentName}</option>)}
-                    </select>
+        <div className="retirements-container animate-fade-in">
+            <div className="page-header">
+                <PageTitle 
+                    title="Upcoming Retirements" 
+                    subtitle="Monitor and manage employees approaching their retirement age for proactive planning" 
+                />
+                <div className="header-actions">
+                    <button className="btn btn-success" onClick={handleExport}>
+                        <Download size={18} /> Export List
+                    </button>
                 </div>
             </div>
 
-            <div className="table-card">
-                <table className="retirements-table">
+            <div className="glass-card mb-6">
+                <div className="form-grid">
+                    <div className="search-box">
+                        <Search size={18} className="search-icon" />
+                        <input
+                            type="text"
+                            placeholder="Search Name or ID..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="form-grid-3">
+                        <div className="form-group">
+                            <select className="form-group-select" value={timeframe} onChange={(e) => setTimeframe(e.target.value)}>
+                                <option value="1">Within 1 Month</option>
+                                <option value="3">Within 3 Months</option>
+                                <option value="6">Within 6 Months</option>
+                                <option value="12">Within 1 Year</option>
+                                <option value="">All Time</option>
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <select className="form-group-select" value={branchId} onChange={(e) => setBranchId(e.target.value)}>
+                                <option value="">All Branches</option>
+                                {branches.map(b => <option key={b.id} value={b.id}>{b.branchName}</option>)}
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <select className="form-group-select" value={departmentId} onChange={(e) => setDepartmentId(e.target.value)}>
+                                <option value="">All Departments</option>
+                                {departments.map(d => <option key={d.id} value={d.id}>{d.departmentName}</option>)}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="table-wrapper glass-card">
+                <table className="table-modern">
                     <thead>
                         <tr>
                             <th>Employee</th>
@@ -145,18 +147,19 @@ function UpcomingRetirements() {
                         {loading ? (
                             <tr>
                                 <td colSpan={6}>
-                                    <div className="empty-state">Loading data...</div>
+                                    <div className="flex-col flex-center py-12">
+                                        <div className="spinner mb-4"></div>
+                                        <p className="text-muted">Analyzing retirement schedules...</p>
+                                    </div>
                                 </td>
                             </tr>
                         ) : retirements.length === 0 ? (
                             <tr>
                                 <td colSpan={6}>
-                                    <div className="empty-state">
-                                        <div className="empty-state-icon">
-                                            <Users size={32} />
-                                        </div>
-                                        <h3 style={{ margin: '0 0 8px 0', color: '#1e293b' }}>No upcoming retirements</h3>
-                                        <p style={{ margin: 0 }}>There are no employees retiring within the selected timeframe.</p>
+                                    <div className="flex-col flex-center py-12 text-muted">
+                                        <Users size={48} className="mb-4 opacity-20" />
+                                        <h3 className="text-lg font-bold">No upcoming retirements</h3>
+                                        <p>There are no employees retiring within the selected timeframe.</p>
                                     </div>
                                 </td>
                             </tr>
@@ -164,25 +167,25 @@ function UpcomingRetirements() {
                             retirements.map((r) => (
                                 <tr key={r.id}>
                                     <td>
-                                        <div className="emp-name">{r.name}</div>
-                                        <div className="emp-id">{r.employeeId}</div>
+                                        <div className="font-bold text-base">{r.name}</div>
+                                        <div className="text-xs text-muted font-mono bg-gray-50 px-2 py-1 rounded inline-block mt-1">{r.employeeId}</div>
                                     </td>
                                     <td>
-                                        <div className="role-text">{r.designation}</div>
-                                        <div className="dept-text">{r.department}</div>
+                                        <div className="font-semibold">{r.designation}</div>
+                                        <div className="text-xs text-muted mt-1">{r.department}</div>
                                     </td>
-                                    <td style={{ color: '#334155' }}>{r.branch}</td>
+                                    <td className="font-medium">{r.branch}</td>
                                     <td>
-                                        <div className="date-primary">{new Date(r.retirementDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</div>
-                                        <div className="date-secondary">DOB: {new Date(r.dob).toLocaleDateString()}</div>
+                                        <div className="font-bold">{new Date(r.retirementDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</div>
+                                        <div className="text-xs text-muted mt-1">DOB: {new Date(r.dob).toLocaleDateString()}</div>
                                     </td>
                                     <td>
-                                        <span className={`time-badge ${r.daysUntil <= 30 ? 'time-urgent' : r.daysUntil <= 90 ? 'time-warning' : 'time-normal'}`}>
-                                            {r.daysUntil} Days
+                                        <span className={`status-badge ${r.daysUntil <= 30 ? 'failed' : r.daysUntil <= 90 ? 'pending' : 'completed'}`}>
+                                            {r.daysUntil} Days Left
                                         </span>
                                     </td>
                                     <td style={{ textAlign: 'center' }}>
-                                        <button className="action-btn">
+                                        <button className="btn btn-secondary btn-sm">
                                             View Profile
                                         </button>
                                     </td>

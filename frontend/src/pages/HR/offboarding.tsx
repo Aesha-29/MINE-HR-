@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import API_BASE from "../api";
-import { UserMinus } from "lucide-react";
+import { UserMinus, ClipboardCheck, Trash2, Plus, Info } from "lucide-react";
 import "./offboarding.css";
+import PageTitle from "../components/PageTitle";
 
 function Offboarding() {
     const [offboardings, setOffboardings] = useState<any[]>([]);
@@ -96,77 +97,107 @@ function Offboarding() {
     );
 
     return (
-        <div className="offboarding-container">
-            <h2 className="page-title" style={{ marginBottom: '24px' }}>
-                <UserMinus size={22} /> Employee Offboarding
-            </h2>
-
-            <div className="top-controls">
-                <input
-                    placeholder="Search by Employee Name..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+        <div className="offboarding-container animate-fade-in">
+            <div className="page-header">
+                <PageTitle 
+                    title="Employee Offboarding" 
+                    subtitle="Manage exit processes, clearances, and organizational separations" 
                 />
-                <button onClick={() => setShowInitiateModal(true)}>Initiate Offboarding</button>
+                <div className="header-actions">
+                    <button className="btn btn-primary" onClick={() => setShowInitiateModal(true)}>
+                        <Plus size={18} /> Initiate Exit
+                    </button>
+                </div>
             </div>
 
-            <div className="table-wrapper">
+            <div className="glass-card mb-6">
+                <div className="form-grid">
+                    <div className="search-box">
+                        <UserMinus size={18} />
+                        <input
+                            placeholder="Search by Employee..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div className="table-wrapper glass-card">
                 {loading ? (
-                    <p style={{ padding: "20px", textAlign: "center" }}>Loading...</p>
+                    <div className="flex-col flex-center py-20">
+                        <div className="spinner mb-4"></div>
+                        <p className="text-muted">Loading exit records...</p>
+                    </div>
                 ) : (
-                    <table>
+                    <table className="table-modern">
                         <thead>
                             <tr>
-                                <th>Employee Name</th>
-                                <th>Designation</th>
-                                <th>Department</th>
-                                <th>Last Working Date</th>
-                                <th>Reason</th>
+                                <th>Employee / Role</th>
+                                <th>Separation Date</th>
+                                <th>Separation Reason</th>
+                                <th>Clearance Progress</th>
                                 <th>Status</th>
-                                <th>Tasks</th>
-                                <th>Actions</th>
+                                <th style={{ textAlign: 'right' }}>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filtered.map(o => {
                                 const completedTasks = o.checklists.filter((c: any) => c.status === 'Completed').length;
                                 const totalTasks = o.checklists.length;
+                                const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
                                 return (
                                     <tr key={o.id}>
-                                        <td style={{ fontWeight: '500' }}>{o.employee?.firstName} {o.employee?.lastName}</td>
-                                        <td>{o.employee?.designation || 'N/A'}</td>
-                                        <td>{o.employee?.department || 'N/A'}</td>
-                                        <td>{new Date(o.lastWorkingDate).toLocaleDateString()}</td>
-                                        <td style={{ maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                            {o.reason || 'N/A'}
+                                        <td>
+                                            <div className="flex-col">
+                                                <span className="font-bold text-slate-800 leading-tight">{o.employee?.firstName} {o.employee?.lastName}</span>
+                                                <span className="text-xs text-muted leading-tight">{o.employee?.designation} • {o.employee?.department}</span>
+                                            </div>
+                                        </td>
+                                        <td className="font-medium text-slate-700">{new Date(o.lastWorkingDate).toLocaleDateString()}</td>
+                                        <td>
+                                            <div className="text-xs max-w-[180px] break-words line-clamp-2" title={o.reason}>
+                                                {o.reason || 'N/A'}
+                                            </div>
                                         </td>
                                         <td>
-                                            <span className={`badge ${o.status.toLowerCase()}`}>
-                                                {o.status}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                <span style={{ fontSize: '13px', fontWeight: '500' }}>{completedTasks}/{totalTasks}</span>
-                                                <div style={{ width: '60px', height: '6px', background: '#e2e8f0', borderRadius: '3px', overflow: 'hidden' }}>
-                                                    <div style={{ height: '100%', width: `${(completedTasks / totalTasks) * 100}%`, background: completedTasks === totalTasks ? '#16a34a' : '#3b82f6' }}></div>
+                                            <div className="flex-col gap-1 min-w-[120px]">
+                                                <div className="flex justify-between items-center px-1">
+                                                    <span className="text-[10px] font-bold text-slate-600">{completedTasks}/{totalTasks} Steps</span>
+                                                    <span className="text-[10px] font-bold text-slate-600">{Math.round(progress)}%</span>
+                                                </div>
+                                                <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                                    <div 
+                                                        className="h-full transition-all duration-500 rounded-full" 
+                                                        style={{ 
+                                                            width: `${progress}%`, 
+                                                            background: progress === 100 ? 'var(--color-success-500)' : 'var(--color-primary-500)' 
+                                                        }}
+                                                    />
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <div style={{ display: 'flex', gap: '8px' }}>
+                                            <span className={`status-badge ${o.status.toLowerCase()}`}>
+                                                {o.status}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div className="flex-row justify-end gap-2">
                                                 <button
-                                                    className="checklist-btn"
+                                                    className="act-btn view"
+                                                    title="View Clearance Checklist"
                                                     onClick={() => { setActiveOffboarding(o); setShowChecklistModal(true); }}
                                                 >
-                                                    Checklist
+                                                    <ClipboardCheck size={16} />
                                                 </button>
                                                 <button
-                                                    style={{ background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer' }}
+                                                    className="act-btn delete"
+                                                    title="Cancel separation process"
                                                     onClick={() => cancelOffboarding(o.id)}
                                                 >
-                                                    Cancel
+                                                    <Trash2 size={16} />
                                                 </button>
                                             </div>
                                         </td>
@@ -175,7 +206,12 @@ function Offboarding() {
                             })}
                             {filtered.length === 0 && (
                                 <tr>
-                                    <td colSpan={8} style={{ textAlign: "center", padding: "30px" }}>No offboarding records found.</td>
+                                    <td colSpan={6} style={{ textAlign: "center", padding: "60px" }}>
+                                        <div className="flex-col flex-center text-muted">
+                                            <UserMinus size={48} className="opacity-20 mb-4" />
+                                            <p className="text-lg font-bold">NoSeparation Records</p>
+                                        </div>
+                                    </td>
                                 </tr>
                             )}
                         </tbody>

@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import API_BASE from "../api";
-import { Plus, ArrowRight, TrendingUp } from "lucide-react";
+import { Plus, ArrowRight, TrendingUp, User, Award, Calendar } from "lucide-react";
 import "./promotion.css";
+import PageTitle from "../components/PageTitle";
 
 function Promotion() {
     const [promotions, setPromotions] = useState<any[]>([]);
@@ -73,29 +74,34 @@ function Promotion() {
     };
 
     return (
-        <div className="promotion-container">
-            <div className="promotion-header">
-                <div>
-                    <h2 className="page-title" style={{ marginBottom: '8px' }}>
-                        <TrendingUp size={22} /> Employee Promotions
-                    </h2>
-                    <p className="p-desc">Track and record employee role and level advancements.</p>
+        <div className="promotion-container animate-fade-in">
+            <div className="page-header">
+                <PageTitle 
+                    title="Career Advancements" 
+                    subtitle="Manage and track employee promotions, role transitions, and level upgrades" 
+                />
+                <div className="header-actions">
+                    <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+                        <Plus size={18} /> Record Advancement
+                    </button>
                 </div>
-                <button className="btn-primary" onClick={() => setShowModal(true)}>
-                    <Plus size={18} /> Record Promotion
-                </button>
             </div>
 
-            <div className="card-panel">
-                {loading ? <p>Loading...</p> : (
-                    <table className="data-table">
+            <div className="table-wrapper glass-card">
+                {loading ? (
+                    <div className="flex-col flex-center py-20">
+                        <div className="spinner mb-4"></div>
+                        <p className="text-muted">Loading career records...</p>
+                    </div>
+                ) : (
+                    <table className="table-modern">
                         <thead>
                             <tr>
-                                <th>Employee</th>
-                                <th>Date</th>
-                                <th>Designation Change</th>
-                                <th>Level Change</th>
-                                <th>Remarks</th>
+                                <th>Employee / ID</th>
+                                <th>Advancement Date</th>
+                                <th>Designation Transition</th>
+                                <th>Level Transition</th>
+                                <th>Remarks & Details</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -105,28 +111,48 @@ function Promotion() {
                                 return (
                                     <tr key={p.id}>
                                         <td>
-                                            <strong>{p.employee?.firstName} {p.employee?.lastName}</strong>
-                                            <div style={{ fontSize: '12px', color: '#64748b' }}>{p.employee?.employeeId}</div>
+                                            <div className="flex items-center gap-3">
+                                                <div className="avatar-sm bg-primary text-white font-bold">
+                                                    {p.employee?.firstName?.charAt(0)}{p.employee?.lastName?.charAt(0)}
+                                                </div>
+                                                <div className="flex-col">
+                                                    <span className="font-bold text-slate-800 leading-tight">{p.employee?.firstName} {p.employee?.lastName}</span>
+                                                    <span className="text-[10px] text-muted font-mono">{p.employee?.employeeId}</span>
+                                                </div>
+                                            </div>
                                         </td>
-                                        <td>{new Date(p.promotionDate).toLocaleDateString()}</td>
+                                        <td className="font-medium text-slate-700">{new Date(p.promotionDate).toLocaleDateString()}</td>
                                         <td>
-                                            <span style={{ color: '#64748b' }}>{p.previousDesignation || "None"}</span>
-                                            <ArrowRight size={14} className="change-arrow" />
-                                            <span style={{ fontWeight: '500' }}>{p.newDesignation}</span>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-xs text-muted italic line-through">{p.previousDesignation || "Entry"}</span>
+                                                <ArrowRight size={14} className="text-primary opacity-50" />
+                                                <span className="text-sm font-bold text-slate-800">{p.newDesignation}</span>
+                                            </div>
                                         </td>
                                         <td>
-                                            <span style={{ color: '#64748b' }}>{prevLevel}</span>
-                                            <ArrowRight size={14} className="change-arrow" />
-                                            <span style={{ color: '#10b981', fontWeight: 'bold' }}>{newLevel}</span>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-xs text-muted">{prevLevel}</span>
+                                                <ArrowRight size={14} className="text-primary opacity-50" />
+                                                <span className="status-badge completed py-1 px-3 !text-[11px]">{newLevel}</span>
+                                            </div>
                                         </td>
-                                        <td style={{ maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                            {p.remarks}
+                                        <td>
+                                            <div className="text-xs max-w-[200px] break-words line-clamp-2" title={p.remarks}>
+                                                {p.remarks}
+                                            </div>
                                         </td>
                                     </tr>
                                 );
                             })}
                             {promotions.length === 0 && (
-                                <tr><td colSpan={5} style={{ textAlign: 'center', padding: '30px' }}>No promotions recorded yet.</td></tr>
+                                <tr>
+                                    <td colSpan={5} style={{ textAlign: 'center', padding: '60px' }}>
+                                        <div className="flex-col flex-center text-muted">
+                                            <TrendingUp size={48} className="opacity-20 mb-4" />
+                                            <p className="text-lg font-bold">No Advancement Records</p>
+                                        </div>
+                                    </td>
+                                </tr>
                             )}
                         </tbody>
                     </table>

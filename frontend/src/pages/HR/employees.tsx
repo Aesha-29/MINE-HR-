@@ -108,168 +108,186 @@ function Employees({ setActivePage, setSelectedEmployee }: any) {
   const probationCount = employees.filter(e => e.status === "Probation").length;
 
   return (
-    <div className="employees-container">
-
+    <div className="employees-container animate-fade-in">
       <div className="page-header">
-        <PageTitle title="All Employees" subtitle="Centralized employee records and workforce directory" />
-        <div className="action-buttons">
-          <button className="btn-outline" onClick={handleReset}>
-            Reset
+        <PageTitle title="Workforce Directory" subtitle="Manage your global talent pool and employee records" />
+        <div className="header-actions">
+          <button className="btn btn-secondary" onClick={handleReset}>
+            Reset Filters
           </button>
-
+          <button className="btn btn-success">
+            <Download size={18} /> Export List
+          </button>
           <button
-            className="btn-primary"
+            className="btn btn-primary"
             onClick={() => {
               setSelectedEmployee(null);
               setActivePage("addEmployee");
             }}
           >
-            <Plus size={18} /> Add Employee
-          </button>
-
-          <button className="btn-success" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Download size={18} /> Import Excel
+            <Plus size={18} /> Add New Hire
           </button>
         </div>
       </div>
 
-      <div className="summary-cards">
-        <div className="card total-card">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-            <div style={{ background: '#eff6ff', padding: '8px', borderRadius: '8px', color: '#3b82f6' }}>
-              <Users size={20} />
-            </div>
-            <h4 style={{ margin: 0 }}>Total Employees</h4>
+      <div className="stats-grid animate-children">
+        <div className="stat-card">
+          <div className="stat-icon bg-blue">
+            <Users size={24} />
           </div>
-          <p>{totalCount}</p>
+          <div className="stat-content">
+            <div className="stat-label">Total Workforce</div>
+            <div className="stat-value">{totalCount}</div>
+          </div>
         </div>
 
-        <div className="card active-card">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-            <div style={{ background: '#ecfdf5', padding: '8px', borderRadius: '8px', color: '#10b981' }}>
-              <UserCheck size={20} />
-            </div>
-            <h4 style={{ margin: 0 }}>Active</h4>
+        <div className="stat-card">
+          <div className="stat-icon bg-green">
+            <UserCheck size={24} />
           </div>
-          <p>{activeCount}</p>
+          <div className="stat-content">
+            <div className="stat-label">Active Talents</div>
+            <div className="stat-value">{activeCount}</div>
+          </div>
         </div>
 
-        <div className="card permanent-card">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-            <div style={{ background: '#f5f3ff', padding: '8px', borderRadius: '8px', color: '#8b5cf6' }}>
-              <Shield size={20} />
-            </div>
-            <h4 style={{ margin: 0 }}>Permanent</h4>
+        <div className="stat-card">
+          <div className="stat-icon bg-blue">
+            <Shield size={24} />
           </div>
-          <p>{permanentCount}</p>
+          <div className="stat-content">
+            <div className="stat-label">Permanent Status</div>
+            <div className="stat-value">{permanentCount}</div>
+          </div>
         </div>
 
-        <div className="card probation-card">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-            <div style={{ background: '#fffbeb', padding: '8px', borderRadius: '8px', color: '#f59e0b' }}>
-              <Clock size={20} />
-            </div>
-            <h4 style={{ margin: 0 }}>Probation</h4>
+        <div className="stat-card">
+          <div className="stat-icon bg-orange">
+            <Clock size={24} />
           </div>
-          <p>{probationCount}</p>
+          <div className="stat-content">
+            <div className="stat-label">On Probation</div>
+            <div className="stat-value">{probationCount}</div>
+          </div>
         </div>
       </div>
 
-      <div className="search-section">
-        <Search size={18} className="search-icon-inline" />
-        <input
-          type="text"
-          placeholder="Search by ID, Name, Email..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
-
-      <div className="branch-filter">
-        {branches.map((branch) => (
-          <div
-            key={branch}
-            className={`branch-pill ${selectedBranch === branch ? "active-pill" : ""}`}
-            onClick={() => setSelectedBranch(branch)}
-          >
-            {branch}
+      <div className="glass-card mb-6">
+        <div className="form-grid items-center">
+          <div className="search-box">
+            <Search size={18} />
+            <input
+              type="text"
+              placeholder="Search by ID, Name, Email..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
-        ))}
+
+          <div className="branch-nav-wrapper">
+            <div className="branch-nav">
+              {branches.map((branch) => (
+                <button
+                  key={branch}
+                  className={`branch-nav-item ${selectedBranch === branch ? "active" : ""}`}
+                  onClick={() => setSelectedBranch(branch)}
+                >
+                  {branch}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="table-wrapper">
+      <div className="table-wrapper glass-card">
         {loading ? (
-          <p style={{ padding: "20px", textAlign: "center" }}>
-            Loading employees from database...
-          </p>
+          <div style={{ padding: "60px", textAlign: "center" }} className="flex-col flex-center">
+            <div className="spinner mb-4"></div>
+            <p className="text-muted">Connecting to employee database...</p>
+          </div>
         ) : (
-          <table>
+          <table className="table-modern">
             <thead>
               <tr>
-                <th>Employee ID</th>
-                <th>Full Name</th>
-                <th>Designation</th>
+                <th>Employee / Role</th>
                 <th>Branch</th>
-                <th>Department</th>
-                <th>Email</th>
-                <th>Mobile</th>
+                <th>Email & Contact</th>
                 <th>Status</th>
-                <th>Action</th>
+                <th style={{ textAlign: 'right' }}>Action</th>
               </tr>
             </thead>
             <tbody>
               {filteredEmployees.map((emp) => (
                 <tr key={emp.id}>
-                  <td>{emp.id || "N/A"}</td>
-                  <td>{(emp.firstName || "")} {(emp.lastName || "")}</td>
-                  <td>{emp.designation}</td>
-                  <td>{emp.branch}</td>
-                  <td>{emp.department}</td>
-                  <td>{emp.email}</td>
-                  <td>{emp.mobile}</td>
                   <td>
-                    <span className={`status-badge ${emp.status.toLowerCase()}`}>
+                    <div className="flex items-center gap-3">
+                      <div className="avatar-sm bg-primary text-white font-bold">
+                        {emp.firstName?.charAt(0)}{emp.lastName?.charAt(0)}
+                      </div>
+                      <div className="flex-col">
+                        <span className="font-bold text-slate-900 leading-tight">{(emp.firstName || "")} {(emp.lastName || "")}</span>
+                        <span className="text-xs text-muted leading-tight">{emp.designation || "No Title"} • {emp.id}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="font-medium text-slate-700">{emp.branch}</div>
+                    <div className="text-xs text-muted">{emp.department}</div>
+                  </td>
+                  <td>
+                    <div className="text-sm font-medium">{emp.email}</div>
+                    <div className="text-xs text-muted">{emp.mobile}</div>
+                  </td>
+                  <td>
+                    <span className={`status-badge ${emp.status?.toLowerCase() || 'pending'}`}>
                       {emp.status}
                     </span>
                   </td>
-                  <td style={{ whiteSpace: "nowrap" }}>
-                    <button
-                      className="btn-icon btn-view"
-                      title="View Employee"
-                      onClick={() => {
-                        setSelectedEmployee(emp);
-                        setActivePage("viewEmployee");
-                      }}
-                    >
-                      <Eye size={16} />
-                    </button>
+                  <td>
+                    <div className="flex justify-end gap-2">
+                      <button
+                        className="act-btn view"
+                        title="View Full Profile"
+                        onClick={() => {
+                          setSelectedEmployee(emp);
+                          setActivePage("viewEmployee");
+                        }}
+                      >
+                        <Eye size={16} />
+                      </button>
 
-                    <button
-                      className="btn-icon btn-edit"
-                      title="Edit Employee"
-                      onClick={() => {
-                        setSelectedEmployee(emp);
-                        setActivePage("addEmployee");
-                      }}
-                    >
-                      <Edit size={16} />
-                    </button>
+                      <button
+                        className="act-btn edit"
+                        title="Quick Edit"
+                        onClick={() => {
+                          setSelectedEmployee(emp);
+                          setActivePage("addEmployee");
+                        }}
+                      >
+                        <Edit size={16} />
+                      </button>
 
-                    <button
-                      className="btn-icon btn-delete"
-                      title="Delete Employee"
-                      onClick={() => handleRemove(emp.id)}
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                      <button
+                        className="act-btn delete"
+                        title="Terminate / Disable"
+                        onClick={() => handleRemove(emp.id)}
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
 
               {filteredEmployees.length === 0 && !loading && (
                 <tr>
-                  <td colSpan={9} style={{ textAlign: "center", padding: "20px" }}>
-                    No employees found in the database.
+                  <td colSpan={5} style={{ textAlign: "center", padding: "60px" }}>
+                    <div className="flex-col flex-center text-muted">
+                       <Users size={48} className="opacity-20 mb-4" />
+                       <p className="text-lg font-bold">No Records Matched</p>
+                       <p>Refine your filters or search terms.</p>
+                    </div>
                   </td>
                 </tr>
               )}

@@ -11,6 +11,7 @@ interface HeaderProps {
 }
 
 function Header({ toggleSidebar, isSidebarOpen, user, onLogout, notifications = [] }: HeaderProps) {
+    const DEPLOY_MARKER = "DEPLOY-2026-04-08-02";
     const [placeholderText, setPlaceholderText] = useState("Search services...");
     const services = [
         "Search Employees...",
@@ -81,6 +82,10 @@ function Header({ toggleSidebar, isSidebarOpen, user, onLogout, notifications = 
             <div className="header-spacer"></div>
 
             <div className="header-right">
+                <div className="deploy-marker" title="Current deployed frontend marker">
+                    {DEPLOY_MARKER}
+                </div>
+
                 {/* Global Clock In / Out Widget */}
                 {user && user.role !== "Admin" && (
                     <div className="clock-widget" style={{ display: 'flex', gap: '8px', marginRight: '24px', paddingLeft: '24px', borderLeft: '1px solid #e2e8f0' }}>

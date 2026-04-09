@@ -1,0 +1,2 @@
+@echo off
+railway variables set -s MINE-HR DATABASE_URL="mysql://4579PdSAb7iFRRN.root:h6aPQzHNXtGIeVrM@gateway01.us-east-1.prod.aws.tidbcloud.com:4000/minehr_db?sslaccept=strict" DIRECT_DATABASE_URL="mysql://4579PdSAb7iFRRN.root:h6aPQzHNXtGIeVrM@gateway01.us-east-1.prod.aws.tidbcloud.com:4000/minehr_db?sslaccept=strict" JWT_SECRET="minehr_secret_key_2024" NIXPACKS_NODE_VERSION=22.14.0 NIXPACKS_INSTALL_CMD="npm install"

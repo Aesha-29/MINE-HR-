@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import API_BASE from "../api";
-import { CheckCircle, XCircle, Eye, Search, UserCog } from "lucide-react";
+import { CheckCircle, XCircle, Eye, Search, UserCog, Filter, AlertTriangle } from "lucide-react";
 import "./profileChangeRequests.css";
+import PageTitle from "../components/PageTitle";
 
 interface EmployeeRef {
     id: number;
@@ -144,97 +145,108 @@ function ProfileChangeRequests() {
     const departments = Array.from(new Set(requests.map(r => r.employee.department).filter(Boolean)));
 
     return (
-        <div className="profile-change-container">
-            <div style={{ marginBottom: '32px' }}>
-                <h2 className="page-title" style={{ marginBottom: '8px' }}>
-                    <UserCog size={22} /> Profile Change Requests
-                </h2>
-                <p style={{ color: '#64748b', margin: 0 }}>Review and approve employee profile updates.</p>
+        <div className="profile-change-container animate-fade-in">
+            <div className="page-header">
+                <PageTitle 
+                    title="Self-Service Requests" 
+                    subtitle="Review and moderate employee profile update requests and data changes" 
+                />
             </div>
 
-            <div className="filters-grid">
-                <div className="filter-group">
-                    <label>Branch</label>
-                    <select value={filterBranch} onChange={(e) => setFilterBranch(e.target.value)}>
-                        <option value="All">All Branches</option>
-                        {branches.map((b: any) => <option key={b} value={b}>{b}</option>)}
-                    </select>
-                </div>
-                <div className="filter-group">
-                    <label>Department</label>
-                    <select value={filterDepartment} onChange={(e) => setFilterDepartment(e.target.value)}>
-                        <option value="All">All Departments</option>
-                        {departments.map((d: any) => <option key={d} value={d}>{d}</option>)}
-                    </select>
-                </div>
-                <div className="filter-group">
-                    <label>Status</label>
-                    <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
-                        <option value="Pending">Pending</option>
-                        <option value="Approved">Approved</option>
-                        <option value="Rejected">Rejected</option>
-                        <option value="All">All Requests</option>
-                    </select>
-                </div>
-                <div className="filter-group">
-                    <label>Risk Level</label>
-                    <select value={filterRisk} onChange={(e) => setFilterRisk(e.target.value)}>
-                        <option value="All">All Risks</option>
-                        <option value="Low">Low</option>
-                        <option value="Medium">Medium</option>
-                        <option value="High">High</option>
-                    </select>
-                </div>
-                <div className="filter-group">
-                    <label>Employee Name or ID</label>
-                    <div style={{ position: 'relative' }}>
-                        <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+            <div className="glass-card mb-8">
+                <div className="form-grid-3">
+                    <div className="form-group">
+                        <label className="form-group-label">Branch</label>
+                        <select className="form-group-select" value={filterBranch} onChange={(e) => setFilterBranch(e.target.value)}>
+                            <option value="All">All Branches</option>
+                            {branches.map((b: any) => <option key={b} value={b}>{b}</option>)}
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label className="form-group-label">Department</label>
+                        <select className="form-group-select" value={filterDepartment} onChange={(e) => setFilterDepartment(e.target.value)}>
+                            <option value="All">All Departments</option>
+                            {departments.map((d: any) => <option key={d} value={d}>{d}</option>)}
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label className="form-group-label">Status</label>
+                        <select className="form-group-select" value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+                            <option value="Pending">Pending</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="All">All Requests</option>
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label className="form-group-label">Risk Level</label>
+                        <select className="form-group-select" value={filterRisk} onChange={(e) => setFilterRisk(e.target.value)}>
+                            <option value="All">All Risks</option>
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+                    <div className="form-group col-span-2">
+                        <label className="form-group-label">Employee Search</label>
                         <input
+                            className="form-group-input"
                             type="text"
                             placeholder="Search name or ID..."
                             value={searchEmployee}
                             onChange={(e) => setSearchEmployee(e.target.value)}
-                            style={{ width: '100%', paddingLeft: '36px', boxSizing: 'border-box' }}
                         />
                     </div>
                 </div>
             </div>
 
-            <div className="table-wrapper">
+            <div className="table-wrapper glass-card overflow-hidden">
                 {loading ? (
-                    <p style={{ textAlign: 'center', padding: '20px' }}>Loading requests...</p>
+                    <div className="flex-col flex-center py-20">
+                        <div className="spinner mb-4"></div>
+                        <p className="text-muted">Loading change requests...</p>
+                    </div>
                 ) : (
-                    <table>
+                    <table className="table-modern">
                         <thead>
                             <tr>
                                 <th>Employee</th>
-                                <th>Change Type</th>
-                                <th>Risk Level</th>
-                                <th>Requested On</th>
-                                <th>Status</th>
-                                <th>Actions</th>
+                                <th>Category</th>
+                                <th>Risk Matrix</th>
+                                <th>Submission Date</th>
+                                <th>Decision Status</th>
+                                <th style={{ textAlign: 'right' }}>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredRequests.map(req => (
                                 <tr key={req.id} className={isSLABreached(req.createdAt, req.status) ? "sla-breach-row" : ""}>
                                     <td>
-                                        <div className="emp-info">
-                                            <span className="emp-name">{req.employee.firstName} {req.employee.lastName}</span>
-                                            <span className="emp-id">{req.employee.employeeId}</span>
+                                        <div className="flex items-center gap-3">
+                                            <div className="avatar-sm bg-primary text-white font-bold">
+                                                {req.employee.firstName?.charAt(0)}{req.employee.lastName?.charAt(0)}
+                                            </div>
+                                            <div className="flex-col">
+                                                <span className="font-bold text-slate-800 leading-tight">{req.employee.firstName} {req.employee.lastName}</span>
+                                                <span className="text-[10px] text-muted font-mono">{req.employee.employeeId}</span>
+                                            </div>
                                         </div>
                                     </td>
-                                    <td>{req.changeType}</td>
                                     <td>
-                                        <span className={`risk-badge ${req.riskLevel.toLowerCase()}`}>
+                                        <span className="text-sm font-medium text-slate-700">{req.changeType}</span>
+                                    </td>
+                                    <td>
+                                        <span className={`status-badge !rounded-lg ${req.riskLevel.toLowerCase()}`}>
                                             {req.riskLevel}
                                         </span>
                                     </td>
                                     <td>
-                                        {new Date(req.createdAt).toLocaleDateString()}
-                                        {isSLABreached(req.createdAt, req.status) && (
-                                            <span className="sla-alert" title="SLA Breached (>2 Days)"> ⚠️ SLA {Math.ceil(Math.abs(new Date().getTime() - new Date(req.createdAt).getTime()) / (1000 * 60 * 60 * 24))} Days</span>
-                                        )}
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm text-slate-600">{new Date(req.createdAt).toLocaleDateString()}</span>
+                                            {isSLABreached(req.createdAt, req.status) && (
+                                                <AlertTriangle size={14} className="text-red-500 animate-pulse" />
+                                            )}
+                                        </div>
                                     </td>
                                     <td>
                                         <span className={`status-badge ${req.status.toLowerCase()}`}>
@@ -242,15 +254,22 @@ function ProfileChangeRequests() {
                                         </span>
                                     </td>
                                     <td>
-                                        <button className="view-btn" onClick={() => setSelectedRequest(req)}>
-                                            <Eye size={16} /> Review
-                                        </button>
+                                        <div className="flex justify-end">
+                                            <button className="act-btn view" onClick={() => setSelectedRequest(req)}>
+                                                Review Changes
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
                             {filteredRequests.length === 0 && (
                                 <tr>
-                                    <td colSpan={6} style={{ textAlign: "center", padding: "20px" }}>No requests found.</td>
+                                    <td colSpan={6} style={{ textAlign: "center", padding: "60px" }}>
+                                        <div className="flex-col flex-center text-muted">
+                                            <Search size={48} className="opacity-20 mb-4" />
+                                            <p className="text-lg font-bold">No Records Found</p>
+                                        </div>
+                                    </td>
                                 </tr>
                             )}
                         </tbody>
@@ -281,8 +300,8 @@ function ProfileChangeRequests() {
                             <h4>Data Changes:</h4>
                             {renderJSONDiff(selectedRequest.oldData, selectedRequest.newData)}
 
-                            <div className="audit-trail">
-                                <h4>Audit Trail</h4>
+                            <div className="audit-trail mt-4">
+                                <h4 className="text-sm font-bold mb-2">Audit Trail</h4>
                                 <ul style={{ listStyleType: "none", padding: 0, fontSize: "13px", color: "#64748b" }}>
                                     <li><strong>Requested On:</strong> {new Date(selectedRequest.createdAt).toLocaleString()}</li>
                                     {selectedRequest.status !== "Pending" && (
@@ -295,15 +314,15 @@ function ProfileChangeRequests() {
                                 <div className="action-area">
                                     <textarea
                                         placeholder="Reason for rejection (Required if rejecting)..."
+                                        className="form-group-input min-h-[80px] mb-4"
                                         value={rejectionReason}
                                         onChange={(e) => setRejectionReason(e.target.value)}
-                                        style={{ width: "100%", padding: "10px", marginTop: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
                                     />
                                     <div className="action-buttons">
-                                        <button className="btn-approve" onClick={handleApprove}>
+                                        <button className="btn btn-success" onClick={handleApprove}>
                                             <CheckCircle size={18} /> Approve & Apply
                                         </button>
-                                        <button className="btn-reject" onClick={handleReject}>
+                                        <button className="btn btn-danger" onClick={handleReject}>
                                             <XCircle size={18} /> Reject Request
                                         </button>
                                     </div>

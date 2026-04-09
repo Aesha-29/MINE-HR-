@@ -3,6 +3,7 @@ import axios from "axios";
 import API_BASE from "../api";
 import { Eye, Edit, RotateCcw, History } from "lucide-react";
 import "./exEmployees.css";
+import PageTitle from "../components/PageTitle";
 
 interface ExEmployee {
   id: string; // our mapped ID for rendering
@@ -73,59 +74,94 @@ function ExEmployees({ setActivePage, setSelectedEmployee }: any) {
   );
 
   return (
-    <div className="ex-container">
-
-      <h2 className="page-title" style={{ marginBottom: '24px' }}>
-        <History size={22} /> Ex Employees
-      </h2>
+    <div className="ex-container animate-fade-in">
+      <div className="page-header">
+        <PageTitle 
+          title="Ex-Employees" 
+          subtitle="Manage former employees and reactivation records" 
+        />
+        <div className="header-actions">
+          <button className="btn btn-secondary" onClick={() => { setSearch(""); setExitFilter(""); }}>
+            Reset Filters
+          </button>
+        </div>
+      </div>
 
       {/* Summary Cards */}
-      <div className="summary-cards">
-        <div className="card">
-          <h4>Total</h4>
-          <p>{employees.length}</p>
+      <div className="stats-grid animate-children">
+        <div className="stat-card">
+          <div className="stat-icon bg-blue">
+            <History size={24} />
+          </div>
+          <div className="stat-content">
+            <div className="stat-label">Total Ex-Employees</div>
+            <div className="stat-value">{employees.length}</div>
+          </div>
         </div>
-        <div className="card">
-          <h4>Eligible for Rehire</h4>
-          <p>{employees.filter(e => e.eligibleForRehire).length}</p>
+        
+        <div className="stat-card">
+          <div className="stat-icon bg-green">
+            <RotateCcw size={24} />
+          </div>
+          <div className="stat-content">
+            <div className="stat-label">Eligible for Rehire</div>
+            <div className="stat-value">{employees.filter(e => e.eligibleForRehire).length}</div>
+          </div>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="filters">
-        <input
-          placeholder="Search by Name"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+      <div className="glass-card mb-6">
+        <div className="form-grid-3">
+          <div className="form-group">
+            <label className="form-group-label">Search Name / ID</label>
+            <input
+              className="form-group-input"
+              placeholder="Search..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
 
-        <select value={month} onChange={(e) => setMonth(e.target.value)}>
-          <option value="">Filter by Month</option>
-          <option>January</option>
-          <option>February</option>
-          <option>March</option>
-        </select>
+          <div className="form-group">
+            <label className="form-group-label">Exit Type</label>
+            <select 
+              className="form-group-select"
+              value={exitFilter} 
+              onChange={(e) => setExitFilter(e.target.value)}
+            >
+              <option value="">All Reasons</option>
+              <option>Resigned</option>
+              <option>Terminated</option>
+              <option>Retired</option>
+            </select>
+          </div>
 
-        <select value={year} onChange={(e) => setYear(e.target.value)}>
-          <option value="">Filter by Year</option>
-          <option>2024</option>
-          <option>2025</option>
-        </select>
-
-        <select value={exitFilter} onChange={(e) => setExitFilter(e.target.value)}>
-          <option value="">Exit Type</option>
-          <option>Resigned</option>
-          <option>Terminated</option>
-          <option>Retired</option>
-        </select>
+          <div className="form-group">
+            <label className="form-group-label">Filter Month/Year</label>
+            <div className="flex gap-2">
+              <select className="form-group-select" value={month} onChange={(e) => setMonth(e.target.value)}>
+                <option value="">Month</option>
+                <option>January</option><option>February</option><option>March</option>
+              </select>
+              <select className="form-group-select" value={year} onChange={(e) => setYear(e.target.value)}>
+                <option value="">Year</option>
+                <option>2024</option><option>2025</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Table */}
-      <div className="table-wrapper">
+      <div className="table-wrapper glass-card">
         {loading ? (
-          <p style={{ textAlign: "center", padding: "20px" }}>Loading Ex-Employees...</p>
+          <div style={{ padding: "40px", textAlign: "center" }} className="flex-col flex-center">
+            <div className="spinner mb-4"></div>
+            <p className="text-muted">Loading archive records...</p>
+          </div>
         ) : (
-          <table>
+          <table className="table-modern">
             <thead>
               <tr>
                 <th>ID</th>
@@ -134,69 +170,77 @@ function ExEmployees({ setActivePage, setSelectedEmployee }: any) {
                 <th>Department</th>
                 <th>Exit Date</th>
                 <th>Reason</th>
-                <th>Eligible for Rehire</th>
+                <th>Eligible</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
               {filteredEmployees.map(emp => (
                 <tr key={emp.employeeId}>
-                  <td>{emp.employeeId}</td>
-                  <td>{emp.firstName} {emp.lastName}</td>
+                  <td className="font-bold">{emp.employeeId}</td>
+                  <td>
+                    <div className="font-semibold">{emp.firstName} {emp.lastName}</div>
+                  </td>
                   <td>{emp.designation}</td>
                   <td>{emp.department}</td>
                   <td>{emp.exitDate}</td>
                   <td>
-                    <span className={`badge`}>
+                    <span className={`status-badge ${emp.reason?.toLowerCase() || 'pending'}`}>
                       {emp.reason || "N/A"}
                     </span>
                   </td>
                   <td>
-                    <span className={`badge ${emp.eligibleForRehire ? "completed" : "terminated"}`}>
+                    <span className={`status-badge ${emp.eligibleForRehire ? "completed" : "failed"}`}>
                       {emp.eligibleForRehire ? "Yes" : "No"}
                     </span>
                   </td>
-                  <td style={{ whiteSpace: "nowrap" }}>
-                    <button
-                      className="btn-icon btn-view"
-                      title="View Employee"
-                      onClick={() => {
-                        setSelectedEmployee(emp);
-                        setActivePage("viewEmployee");
-                      }}
-                    >
-                      <Eye size={16} />
-                    </button>
-                    <button
-                      className="btn-icon btn-edit"
-                      title="Edit Employee"
-                      onClick={() => {
-                        setSelectedEmployee(emp);
-                        setActivePage("addEmployee");
-                      }}
-                    >
-                      <Edit size={16} />
-                    </button>
-                    <button
-                      className="btn-icon renew-btn"
-                      title="Rehire Employee"
-                      onClick={() => handleReactivate(emp.employeeId)}
-                    >
-                      <RotateCcw size={16} />
-                    </button>
+                  <td>
+                    <div className="action-row">
+                      <button
+                        className="act-btn view"
+                        title="View Profile"
+                        onClick={() => {
+                          setSelectedEmployee(emp);
+                          setActivePage("viewEmployee");
+                        }}
+                      >
+                        <Eye size={16} />
+                      </button>
+                      <button
+                        className="act-btn edit"
+                        title="Edit Details"
+                        onClick={() => {
+                          setSelectedEmployee(emp);
+                          setActivePage("addEmployee");
+                        }}
+                      >
+                        <Edit size={16} />
+                      </button>
+                      <button
+                        className="act-btn view"
+                        title="Reactivate Employee"
+                        onClick={() => handleReactivate(emp.employeeId)}
+                      >
+                        <RotateCcw size={16} />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
               {filteredEmployees.length === 0 && !loading && (
                 <tr>
-                  <td colSpan={8} style={{ textAlign: "center", padding: "20px" }}>No Ex-Employees found.</td>
+                  <td colSpan={8} style={{ textAlign: "center", padding: "40px" }}>
+                    <div className="flex-col flex-center text-muted">
+                      <History size={48} className="mb-4 opacity-20" />
+                      <p>No archived employees found matching filters.</p>
+                    </div>
+                  </td>
                 </tr>
               )}
             </tbody>
           </table>
         )}
       </div>
-
     </div>
   );
 }
