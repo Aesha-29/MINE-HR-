@@ -1,13 +1,17 @@
 services:
   - type: web
-      name: mine-hr
-          env: node
-              plan: free
-                  buildCommand: cd backend && npm install && npx prisma generate && npm run build
-                      startCommand: cd backend && npm start
-                          healthCheckPath: /api/health
-                              autoDeploy: true
-                                  envVars:
-                                        - key: NODE_ENV
-                                                value: production
+    name: mine-hr
+    env: node
+    plan: free
+    buildCommand: cd backend && npm install && npx prisma generate && npm run build
+    startCommand: cd backend && npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromEnv: DATABASE_URL
+      - key: JWT_SECRET
+        fromEnv: JWT_SECRET
                                                 
