@@ -999,6 +999,8 @@ function App() {
     return <Login onLogin={handleLogin} />;
   }
 
+  const renderedPage = renderPage();
+
   return (
     <div className="app-layout">
       <Sidebar
@@ -1010,17 +1012,45 @@ function App() {
       />
 
       <div className="main-area">
-        <Header
-          toggleSidebar={toggleSidebar}
-          isSidebarOpen={isSidebarOpen}
-          user={currentUser}
-          onLogout={handleLogout}
-          notifications={notifications}
-        />
+        <ModuleErrorBoundary moduleKey={`shell-${activePage}`}>
+          <Header
+            toggleSidebar={toggleSidebar}
+            isSidebarOpen={isSidebarOpen}
+            user={currentUser}
+            onLogout={handleLogout}
+            notifications={notifications}
+          />
+        </ModuleErrorBoundary>
 
         <div className="main-content">
+          {bypassLogin && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "12px",
+                flexWrap: "wrap",
+                marginBottom: "14px",
+                padding: "10px 12px",
+                borderRadius: "12px",
+                border: "1px solid var(--color-border)",
+                background: "linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)",
+              }}
+            >
+              <div style={{ color: "var(--color-text-muted)", fontSize: "12px" }}>
+                Render mode active. Current page: <strong style={{ color: "var(--color-text)" }}>{activePage}</strong>
+              </div>
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                <button className="btn-secondary" type="button" onClick={() => setActivePage("projectOverview")}>Overview</button>
+                <button className="btn-secondary" type="button" onClick={() => setActivePage("dashboard")}>Dashboard</button>
+                <button className="btn-secondary" type="button" onClick={() => setActivePage("employees")}>Employees</button>
+              </div>
+            </div>
+          )}
+
           <ModuleErrorBoundary moduleKey={activePage}>
-            {renderPage()}
+            {renderedPage || <ProjectOverview setActivePage={setActivePage} />}
           </ModuleErrorBoundary>
         </div>
       </div>
