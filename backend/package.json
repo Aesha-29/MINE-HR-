@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch index.ts",
-    "generate": "prisma generate",
-    "migrate:deploy": "prisma migrate deploy",
-    "build": "prisma generate && tsc",
-    "start": "npm run migrate:deploy && node dist/index.js",
+    "generate": "npx prisma generate",
+    "migrate:deploy": "npx prisma migrate deploy",
+    "build": "npx prisma generate && tsc",
+    "start": "npx prisma migrate deploy && node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
