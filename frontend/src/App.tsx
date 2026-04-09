@@ -250,6 +250,7 @@ function App() {
     if (bypassLogin) {
       setCurrentUser(RENDER_BYPASS_USER);
       setIsAuthenticated(true);
+      setActivePage("dashboard");
       delete axios.defaults.headers.common["Authorization"];
       return;
     }
@@ -862,9 +863,11 @@ function App() {
           notifications={notifications}
         />
 
-        <ModuleErrorBoundary moduleKey={activePage}>
-          {renderPage()}
-        </ModuleErrorBoundary>
+        <div className="main-content">
+          <ModuleErrorBoundary moduleKey={activePage}>
+            {renderPage()}
+          </ModuleErrorBoundary>
+        </div>
       </div>
       <ToastContainer />
     </div>
