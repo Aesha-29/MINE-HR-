@@ -212,6 +212,16 @@ import ManageLostAndFound from "./pages/LostAndFound/ManageLostAndFound";
 import ClaimVerification from "./pages/LostAndFound/ClaimVerification";
 import LostAndFoundReport from "./pages/LostAndFound/LostAndFoundReport";
 
+const RENDER_BYPASS_USER = {
+  id: 0,
+  firstName: "Render",
+  lastName: "Admin",
+  role: "Admin",
+  type: "Manager",
+  bypassAllAccess: true,
+  email: "render-admin@minehr.local"
+};
+
 function App() {
   const bypassLogin =
     import.meta.env.VITE_BYPASS_LOGIN === "true" ||
@@ -225,25 +235,11 @@ function App() {
         return JSON.parse(userRaw);
       }
       if (bypassLogin) {
-        return {
-          id: 0,
-          firstName: "Render",
-          lastName: "Admin",
-          role: "Admin",
-          email: "render-admin@minehr.local"
-        };
+        return RENDER_BYPASS_USER;
       }
       return null;
     } catch {
-      return bypassLogin
-        ? {
-            id: 0,
-            firstName: "Render",
-            lastName: "Admin",
-            role: "Admin",
-            email: "render-admin@minehr.local"
-          }
-        : null;
+      return bypassLogin ? RENDER_BYPASS_USER : null;
     }
   });
 
@@ -251,6 +247,13 @@ function App() {
   const [activePage, setActivePage] = useState("dashboard");
 
   useEffect(() => {
+    if (bypassLogin) {
+      setCurrentUser(RENDER_BYPASS_USER);
+      setIsAuthenticated(true);
+      delete axios.defaults.headers.common["Authorization"];
+      return;
+    }
+
     const userRaw = localStorage.getItem("user");
     let user: any = null;
     try {
@@ -818,13 +821,7 @@ function App() {
     delete axios.defaults.headers.common["Authorization"];
     if (bypassLogin) {
       setIsAuthenticated(true);
-      setCurrentUser({
-        id: 0,
-        firstName: "Render",
-        lastName: "Admin",
-        role: "Admin",
-        email: "render-admin@minehr.local"
-      });
+      setCurrentUser(RENDER_BYPASS_USER);
       setActivePage("dashboard");
       return;
     }
