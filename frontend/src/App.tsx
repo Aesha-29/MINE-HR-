@@ -3,7 +3,6 @@ import axios from "axios";
 import Header from "./components/header";
 import Sidebar from "./components/sidebar";
 import { ToastContainer } from "./components/Toast";
-import ModuleErrorBoundary from "./components/ModuleErrorBoundary";
 
 import Dashboard from "./pages/Dashboard/dashboard";
 import FinanceDashboard from "./pages/Dashboard/financeDashboard";
@@ -21,7 +20,7 @@ import ProfileChangeRequests from "./pages/HR/profileChangeRequests"; // NEW
 import StructureManagement from "./pages/Structure/structureManagement";
 import Resignation from "./pages/HR/resignation";
 import Promotion from "./pages/HR/promotion"; // NEW
-import Login from "./pages/Auth/login";
+// import Login from "./pages/login"; // NEW
 import AttendanceGrid from "./pages/HR/attendanceGrid"; // NEW
 import PayrollDashboard from "./pages/Dashboard/payrollDashboard"; // NEW
 import BulkUpdate from "./pages/HR/bulkUpdate"; // NEW
@@ -212,224 +211,24 @@ import ManageLostAndFound from "./pages/LostAndFound/ManageLostAndFound";
 import ClaimVerification from "./pages/LostAndFound/ClaimVerification";
 import LostAndFoundReport from "./pages/LostAndFound/LostAndFoundReport";
 
-const RENDER_BYPASS_USER = {
-  id: 0,
-  firstName: "Render",
-  lastName: "Admin",
-  role: "Admin",
-  type: "Manager",
-  bypassAllAccess: true,
-  email: "render-admin@minehr.local"
-};
-
-type OverviewSection = {
-  title: string;
-  description: string;
-  items: Array<{
-    label: string;
-    page: string;
-    detail: string;
-  }>;
-};
-
-const PROJECT_OVERVIEW_SECTIONS: OverviewSection[] = [
-  {
-    title: "Core",
-    description: "Start here for the operational home screen and finance summaries.",
-    items: [
-      { label: "Dashboard", page: "dashboard", detail: "Live employee and department overview" },
-      { label: "Finance", page: "finance", detail: "Cash flow and profitability panels" },
-      { label: "App Banner", page: "appBanner", detail: "Homepage notices and announcements" },
-      { label: "Admin Settings", page: "appSettings", detail: "Platform configuration" },
-    ],
-  },
-  {
-    title: "HR",
-    description: "Employee lifecycle, attendance, leave, and organization controls.",
-    items: [
-      { label: "Employees", page: "employees", detail: "Employee directory and records" },
-      { label: "Add Employee", page: "addEmployee", detail: "Create or update employee profiles" },
-      { label: "Attendance", page: "attendanceGrid", detail: "Attendance grid and logs" },
-      { label: "Leave", page: "leaveRequests", detail: "Requests, policy, balances, and approvals" },
-      { label: "Shift", page: "shiftManagement", detail: "Shift setup and assignment tools" },
-      { label: "Payroll", page: "payrollDashboard", detail: "Payroll dashboard and reporting" },
-      { label: "Onboarding", page: "onboarding", detail: "Joiner workflow" },
-      { label: "Offboarding", page: "offboarding", detail: "Exit workflow" },
-    ],
-  },
-  {
-    title: "Operations",
-    description: "Field work, orders, logistics, and route planning.",
-    items: [
-      { label: "Sales", page: "salesDashboard", detail: "Commercial dashboard" },
-      { label: "Orders", page: "viewOrders", detail: "Order management" },
-      { label: "Route Map", page: "orderRouteMap", detail: "Route planning map" },
-      { label: "Daily Sales", page: "dailySalesReport", detail: "Daily sales tracking" },
-      { label: "Products", page: "manageProduct", detail: "Product catalog" },
-      { label: "Stock", page: "manageProductStock", detail: "Inventory levels" },
-      { label: "Retailers", page: "manageRetailer", detail: "Retailer management" },
-      { label: "Distributors", page: "manageDistributor", detail: "Distributor management" },
-    ],
-  },
-  {
-    title: "Engagement",
-    description: "Templates, surveys, polls, events, and people engagement tools.",
-    items: [
-      { label: "Templates", page: "templates", detail: "Reusable workflow templates" },
-      { label: "Survey", page: "manageSurvey", detail: "Survey creation and management" },
-      { label: "Polls", page: "pollSummary", detail: "Poll workflows and summary" },
-      { label: "Events", page: "viewEvents", detail: "Event scheduling and reports" },
-      { label: "Engagement", page: "engagementEvents", detail: "Employee engagement program" },
-      { label: "LMS", page: "lmsCourses", detail: "Learning module" },
-    ],
-  },
-  {
-    title: "Records",
-    description: "Logs, balance sheets, assets, assets, and compliance-oriented modules.",
-    items: [
-      { label: "Logs", page: "activityLog", detail: "Activity, employee, and session logs" },
-      { label: "Balance Sheet", page: "balanceSheetManage", detail: "Balance sheet operations" },
-      { label: "Assets", page: "assetDashboard", detail: "Asset setup and maintenance" },
-      { label: "Penalty", page: "penaltyRules", detail: "Penalty rules and reports" },
-      { label: "Quotation", page: "quotationTemplates", detail: "Quotation setup" },
-      { label: "Task Sheet", page: "taskDashboard", detail: "Task management hub" },
-      { label: "Nominee", page: "nominationType", detail: "Nominee configuration" },
-      { label: "Lost & Found", page: "manageLostAndFound", detail: "Claims and reporting" },
-    ],
-  },
-];
-
-function ProjectOverview({ setActivePage }: { setActivePage: (page: string) => void }) {
-  return (
-    <div className="project-overview" style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">MineHR Project Overview</h1>
-          <p style={{ margin: "8px 0 0", color: "var(--color-text-muted)" }}>
-            A complete map of the main application areas. Use these shortcuts to open any module directly.
-          </p>
-        </div>
-        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-          <button className="btn-primary" type="button" onClick={() => setActivePage("dashboard")}>Open Dashboard</button>
-          <button className="btn-secondary" type="button" onClick={() => setActivePage("employees")}>Open Employees</button>
-        </div>
-      </div>
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-          gap: "16px",
-        }}
-      >
-        {PROJECT_OVERVIEW_SECTIONS.map((section) => (
-          <section
-            key={section.title}
-            className="lm-card"
-            style={{
-              padding: "18px",
-              borderRadius: "20px",
-              background: "white",
-              border: "1px solid var(--color-border)",
-              boxShadow: "var(--shadow-sm)",
-            }}
-          >
-            <div style={{ marginBottom: "14px" }}>
-              <h3 style={{ margin: 0, fontSize: "18px", fontWeight: 800, color: "var(--color-text)" }}>{section.title}</h3>
-              <p style={{ margin: "6px 0 0", color: "var(--color-text-muted)", fontSize: "13px", lineHeight: 1.5 }}>
-                {section.description}
-              </p>
-            </div>
-
-            <div style={{ display: "grid", gap: "10px" }}>
-              {section.items.map((item) => (
-                <button
-                  key={item.page}
-                  type="button"
-                  onClick={() => setActivePage(item.page)}
-                  style={{
-                    width: "100%",
-                    textAlign: "left",
-                    border: "1px solid var(--color-border)",
-                    borderRadius: "14px",
-                    padding: "12px 14px",
-                    background: "linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)",
-                    cursor: "pointer",
-                  }}
-                >
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", alignItems: "center" }}>
-                    <strong style={{ color: "var(--color-text)", fontSize: "14px" }}>{item.label}</strong>
-                    <span style={{ color: "var(--primary)", fontWeight: 700, fontSize: "12px" }}>Open</span>
-                  </div>
-                  <div style={{ color: "var(--color-text-muted)", fontSize: "12px", marginTop: "4px", lineHeight: 1.45 }}>
-                    {item.detail}
-                  </div>
-                </button>
-              ))}
-            </div>
-          </section>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function App() {
-  const bypassLogin =
-    import.meta.env.VITE_BYPASS_LOGIN === "true" ||
-    (typeof window !== "undefined" && window.location.hostname.endsWith("onrender.com"));
-
-  const [isAuthenticated, setIsAuthenticated] = useState(() => bypassLogin || Boolean(localStorage.getItem("token")));
-  const [currentUser, setCurrentUser] = useState<any>(() => {
-    const userRaw = localStorage.getItem("user");
-    try {
-      if (userRaw) {
-        return JSON.parse(userRaw);
-      }
-      if (bypassLogin) {
-        return RENDER_BYPASS_USER;
-      }
-      return null;
-    } catch {
-      return bypassLogin ? RENDER_BYPASS_USER : null;
-    }
+  const [isAuthenticated, setIsAuthenticated] = useState(true); // Bypassed login
+  const [currentUser, setCurrentUser] = useState<any>({
+    name: "Guest", role: "Admin"
   });
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [activePage, setActivePage] = useState(() => (bypassLogin ? "projectOverview" : "dashboard"));
+  const [activePage, setActivePage] = useState("dashboard");
 
   useEffect(() => {
-    if (bypassLogin) {
-      setCurrentUser(RENDER_BYPASS_USER);
-      setIsAuthenticated(true);
-      setActivePage("projectOverview");
-      delete axios.defaults.headers.common["Authorization"];
-      return;
-    }
-
-    const userRaw = localStorage.getItem("user");
-    let user: any = null;
-    try {
-      user = userRaw ? JSON.parse(userRaw) : null;
-    } catch {
-      user = null;
-    }
-
-    if (user) {
-      setCurrentUser(user);
-    }
-
-    const token = localStorage.getItem("token");
-    setIsAuthenticated(bypassLogin || Boolean(token));
-
-    if (token) {
+    if (isAuthenticated) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
     } else {
       delete axios.defaults.headers.common["Authorization"];
     }
-  }, []);
+  }, [isAuthenticated]);
 
-  // ðŸ”¹ NEW: store selected employee for view/edit
+  // 🔹 NEW: store selected employee for view/edit
   const [selectedEmployee, setSelectedEmployee] = useState<any>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
   const [selectedShift, setSelectedShift] = useState<any>(null);
@@ -438,7 +237,7 @@ function App() {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-  // ðŸ”¹ Global Notifications
+  // 🔹 Global Notifications
   const [notifications, setNotifications] = useState<any[]>([
     { id: 1, text: "Leave Request Approved", time: "2h ago", type: "success" },
     { id: 2, text: "New Policy: Health Insurance", time: "5h ago", type: "info" },
@@ -491,9 +290,6 @@ function App() {
 
       case "dashboard":
         return <Dashboard />;
-
-      case "projectOverview":
-        return <ProjectOverview setActivePage={setActivePage} />;
 
       case "finance":
         return <FinanceDashboard />;
@@ -974,32 +770,13 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    delete axios.defaults.headers.common["Authorization"];
-    if (bypassLogin) {
-      setIsAuthenticated(true);
-      setCurrentUser(RENDER_BYPASS_USER);
-      setActivePage("projectOverview");
-      return;
-    }
-
     setIsAuthenticated(false);
     setCurrentUser(null);
   };
 
-  const handleLogin = (token: string, user: any) => {
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(user));
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    setCurrentUser(user);
-    setIsAuthenticated(true);
-    setActivePage("dashboard");
-  };
-
-  if (!bypassLogin && !isAuthenticated) {
-    return <Login onLogin={handleLogin} />;
-  }
-
-  const renderedPage = renderPage();
+  // if (!isAuthenticated) {
+  //   return <Login onLogin={handleLogin} />;
+  // }
 
   return (
     <div className="app-layout">
@@ -1012,47 +789,15 @@ function App() {
       />
 
       <div className="main-area">
-        <ModuleErrorBoundary moduleKey={`shell-${activePage}`}>
-          <Header
-            toggleSidebar={toggleSidebar}
-            isSidebarOpen={isSidebarOpen}
-            user={currentUser}
-            onLogout={handleLogout}
-            notifications={notifications}
-          />
-        </ModuleErrorBoundary>
+        <Header
+          toggleSidebar={toggleSidebar}
+          isSidebarOpen={isSidebarOpen}
+          user={currentUser}
+          onLogout={handleLogout}
+          notifications={notifications}
+        />
 
-        <div className="main-content">
-          {bypassLogin && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: "12px",
-                flexWrap: "wrap",
-                marginBottom: "14px",
-                padding: "10px 12px",
-                borderRadius: "12px",
-                border: "1px solid var(--color-border)",
-                background: "linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)",
-              }}
-            >
-              <div style={{ color: "var(--color-text-muted)", fontSize: "12px" }}>
-                Render mode active. Current page: <strong style={{ color: "var(--color-text)" }}>{activePage}</strong>
-              </div>
-              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-                <button className="btn-secondary" type="button" onClick={() => setActivePage("projectOverview")}>Overview</button>
-                <button className="btn-secondary" type="button" onClick={() => setActivePage("dashboard")}>Dashboard</button>
-                <button className="btn-secondary" type="button" onClick={() => setActivePage("employees")}>Employees</button>
-              </div>
-            </div>
-          )}
-
-          <ModuleErrorBoundary moduleKey={activePage}>
-            {renderedPage || <ProjectOverview setActivePage={setActivePage} />}
-          </ModuleErrorBoundary>
-        </div>
+        {renderPage()}
       </div>
       <ToastContainer />
     </div>
