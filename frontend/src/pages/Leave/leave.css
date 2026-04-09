@@ -1062,37 +1062,19 @@
 }
 
 @media (max-width: 640px) {
+  .lm-two-col,
   .lm-three-col {
+    grid-template-columns: 1fr;
+  }
 
   .leave-rule-switches {
-  flex-direction: column;
+    flex-direction: column;
   }
 
   .leave-mini-input {
-  width: 100%;
-  min-width: 0;
+    width: 100%;
+    min-width: 0;
   }
-    grid-template-columns: 1fr;
-}
-
-.lm-two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
-}
-
-.lm-three-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1rem;
-}
-
-@media (max-width: 768px) {
-
-    .lm-two-col,
-    .lm-three-col {
-        grid-template-columns: 1fr;
-    }
 }
 
 /* ── Form fields ── */
