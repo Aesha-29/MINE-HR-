@@ -213,13 +213,37 @@ import ClaimVerification from "./pages/LostAndFound/ClaimVerification";
 import LostAndFoundReport from "./pages/LostAndFound/LostAndFoundReport";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => Boolean(localStorage.getItem("token")));
+  const bypassLogin =
+    import.meta.env.VITE_BYPASS_LOGIN === "true" ||
+    (typeof window !== "undefined" && window.location.hostname.endsWith("onrender.com"));
+
+  const [isAuthenticated, setIsAuthenticated] = useState(() => bypassLogin || Boolean(localStorage.getItem("token")));
   const [currentUser, setCurrentUser] = useState<any>(() => {
     const userRaw = localStorage.getItem("user");
     try {
-      return userRaw ? JSON.parse(userRaw) : null;
-    } catch {
+      if (userRaw) {
+        return JSON.parse(userRaw);
+      }
+      if (bypassLogin) {
+        return {
+          id: 0,
+          firstName: "Render",
+          lastName: "Admin",
+          role: "Admin",
+          email: "render-admin@minehr.local"
+        };
+      }
       return null;
+    } catch {
+      return bypassLogin
+        ? {
+            id: 0,
+            firstName: "Render",
+            lastName: "Admin",
+            role: "Admin",
+            email: "render-admin@minehr.local"
+          }
+        : null;
     }
   });
 
@@ -240,7 +264,7 @@ function App() {
     }
 
     const token = localStorage.getItem("token");
-    setIsAuthenticated(Boolean(token));
+    setIsAuthenticated(bypassLogin || Boolean(token));
 
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
@@ -792,6 +816,19 @@ function App() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     delete axios.defaults.headers.common["Authorization"];
+    if (bypassLogin) {
+      setIsAuthenticated(true);
+      setCurrentUser({
+        id: 0,
+        firstName: "Render",
+        lastName: "Admin",
+        role: "Admin",
+        email: "render-admin@minehr.local"
+      });
+      setActivePage("dashboard");
+      return;
+    }
+
     setIsAuthenticated(false);
     setCurrentUser(null);
   };
@@ -805,7 +842,7 @@ function App() {
     setActivePage("dashboard");
   };
 
-  if (!isAuthenticated) {
+  if (!bypassLogin && !isAuthenticated) {
     return <Login onLogin={handleLogin} />;
   }
 
