@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { 
   ArrowLeft, 
   Plus, 
@@ -16,7 +16,7 @@ import {
   MessageCircle
 } from "lucide-react";
 import { pollAPI } from "../../services/apiService";
-import "./Poll.css";
+import "./AddPoll.css";
 import PageTitle from "../../components/PageTitle";
 
 const AddPoll = ({ setActivePage }: { setActivePage: (page: string) => void }) => {

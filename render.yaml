@@ -1,19 +1,13 @@
 services:
   - type: web
-    name: mine-hr
-    env: node
-    plan: free
-    buildCommand: npm install && npm run build
-    startCommand: npm run start
-    healthCheckPath: /api/health
-    autoDeploy: true
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: DATABASE_URL
-        value: "mysql://4579PdSAb7iFRRN.root:h6aPQzHNXtGIeVrM@gateway01.us-east-1.prod.aws.tidbcloud.com:4000/minehr_db?sslaccept=strict"
-      - key: DIRECT_DATABASE_URL
-        value: "mysql://4579PdSAb7iFRRN.root:h6aPQzHNXtGIeVrM@gateway01.us-east-1.prod.aws.tidbcloud.com:4000/minehr_db?sslaccept=strict"
-      - key: JWT_SECRET
-        value: "minehr_secret_key_2024"
+      name: mine-hr
+          env: node
+              plan: free
+                  buildCommand: cd backend && npm install && npx prisma generate && npm run build
+                      startCommand: cd backend && npm start
+                          healthCheckPath: /api/health
+                              autoDeploy: true
+                                  envVars:
+                                        - key: NODE_ENV
+                                                value: production
                                                 

@@ -7,12 +7,12 @@ import {
   Check,
   X,
   ArrowRight,
-  ShieldAlert,
     Clock,
     Scan
 } from "lucide-react";
 import { faceXAPI } from "../../services/apiService";
 import { toast } from "../../components/Toast";
+import "./FaceChangeRequest.css";
 
 interface FaceChangeRequestProps {
     setActivePage?: (page: string) => void;
@@ -68,16 +68,11 @@ const FaceChangeRequest: React.FC<FaceChangeRequestProps> = ({ setActivePage }) 
     };
 
     return (
-        <div className="main-content animate-fade-in">
-            <div className="page-header" style={{ marginBottom: "24px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                   <div style={{ padding: "12px", background: "rgba(99, 102, 241, 0.1)", borderRadius: "12px" }}>
-                       <ShieldAlert size={28} color="var(--primary)" />
-                   </div>
-                   <div>
-                        <h1 className="page-title"><Scan size={22} /> Approval Workflow</h1>
-                        <p className="page-subtitle">Security approval workflow for biometric face signature update requests</p>
-                   </div>
+        <div className="main-content animate-fade-in fx-change-page">
+            <div className="page-header fx-page-header">
+                <div>
+                    <h1 className="page-title"><Scan size={22} /> Approval Workflow</h1>
+                    <p className="page-subtitle">Security approval workflow for biometric face signature update requests</p>
                 </div>
             </div>
 

@@ -9,13 +9,13 @@ import {
   Tag, 
   Loader2,
   AlertCircle,
-  Cpu,
   Activity,
     Scan,
   Globe
 } from "lucide-react";
 import { faceXAPI } from "../../services/apiService";
 import { toast } from "../../components/Toast";
+import "./FaceAppDevice.css";
 
 interface FaceAppDeviceProps {
     setActivePage?: (page: string) => void;
@@ -79,16 +79,11 @@ const FaceAppDevice: React.FC<FaceAppDeviceProps> = ({ setActivePage }) => {
     };
 
     return (
-        <div className="main-content animate-fade-in">
-            <div className="page-header" style={{ marginBottom: "24px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                   <div style={{ padding: "12px", background: "rgba(99, 102, 241, 0.1)", borderRadius: "12px" }}>
-                       <Cpu size={28} color="var(--primary)" />
-                   </div>
-                   <div>
-                        <h1 className="page-title"><Scan size={22} /> Registered Devices</h1>
-                        <p className="page-subtitle">Security control and health monitoring for all hardware devices running FaceX application</p>
-                   </div>
+        <div className="main-content animate-fade-in fx-device-page">
+            <div className="page-header fx-page-header">
+                <div>
+                    <h1 className="page-title"><Scan size={22} /> Registered Devices</h1>
+                    <p className="page-subtitle">Security control and health monitoring for all hardware devices running FaceX application</p>
                 </div>
             </div>
 

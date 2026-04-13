@@ -3,7 +3,6 @@ import "./sidebar.css";
 import logoNew from "../assets/MineHR logo.png";
 
 import {
-  LayoutDashboard,
   Settings,
   Users,
   Calculator,
@@ -40,8 +39,6 @@ interface SidebarProps {
 
 function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user }: SidebarProps) {
   const companyName = "MineHR-Solutions Pvt. Ltd.";
-  const hasHrOrAdmin = user?.bypassAllAccess || user?.role === "HR" || user?.role === "Admin";
-  const hasHrAdminOrManager = hasHrOrAdmin || user?.type === "Manager";
 
   const [employeesOpen, setEmployeesOpen] = useState(false);
   const [shiftOpen, setShiftOpen] = useState(false);
@@ -117,19 +114,6 @@ function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user 
         {/* Menu */}
         <nav className="sidebar-menu">
           <ul>
-            {/* Dashboard */}
-            <li
-              className={activePage === "dashboard" ? "active" : ""}
-              onClick={() => setActivePage("dashboard")}
-              style={{ cursor: "pointer" }}
-            >
-              <div className="menu-item-content">
-                <LayoutDashboard size={18} className="menu-icon" />
-                <span>Dashboard</span>
-              </div>
-              <ChevronRight size={16} className="arrow-icon" />
-            </li>
-
             <li
               className={activePage === "finance" ? "active" : ""}
               onClick={() => setActivePage("finance")}
@@ -141,6 +125,7 @@ function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user 
               </div>
               <ChevronRight size={16} className="arrow-icon" />
             </li>
+
             <li
               className={`${activePage?.includes("employees") ? "active-parent" : ""
                 }`}
@@ -168,7 +153,7 @@ function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user 
                   <span>All Employees</span>
                 </li>
 
-                {hasHrAdminOrManager && (
+                {(user?.role === "HR" || user?.role === "Admin" || user?.type === "Manager") && (
                   <>
                     <li
                       className={activePage === "addEmployee" ? "active-sub" : ""}
@@ -208,7 +193,7 @@ function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user 
                   <span>Resignation</span>
                 </li>
 
-                {hasHrAdminOrManager && (
+                {(user?.role === "HR" || user?.role === "Admin" || user?.type === "Manager") && (
                   <li
                     className={activePage === "promotion" ? "active-sub" : ""}
                     onClick={(e) => { e.stopPropagation(); setActivePage("promotion"); }}
@@ -219,7 +204,7 @@ function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user 
                 )}
 
 
-                {hasHrAdminOrManager && (
+                {(user?.role === "HR" || user?.role === "Admin" || user?.type === "Manager") && (
                   <>
 
                     <li
@@ -289,7 +274,7 @@ function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user 
                   <span>Profile Change Requests</span>
                 </li>
 
-                {hasHrOrAdmin && (
+                {(user?.role === "HR" || user?.role === "Admin") && (
                   <>
                     <li
                       className={activePage === "structureManagement" ? "active-sub" : ""}
@@ -486,7 +471,7 @@ function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user 
             )}
 
             {/* Template Module Submenu */}
-            {hasHrOrAdmin && (
+            {(user?.role === "HR" || user?.role === "Admin") && (
               <>
                 <li
                   className={`${templateOpen ? "active-parent" : ""}`}
@@ -529,7 +514,7 @@ function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user 
             )}
 
             {/* Order Product Module Submenu */}
-            {hasHrOrAdmin && (
+            {(user?.role === "HR" || user?.role === "Admin") && (
               <>
                 <li
                   className={`${orderProductOpen ? "active-parent" : ""}`}
@@ -863,7 +848,7 @@ function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user 
                   <div className="sub-dot"></div>
                   <span>Advance Salary</span>
                 </li>
-                {hasHrAdminOrManager && (
+                {(user?.role === "HR" || user?.role === "Admin" || user?.type === "Manager") && (
                   <>
                     <li
                       className={activePage === "bulkAdvanceSalary" ? "active-sub" : ""}
@@ -888,7 +873,7 @@ function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user 
                   <div className="sub-dot"></div>
                   <span>Salary Requests</span>
                 </li>
-                {hasHrAdminOrManager && (
+                {(user?.role === "HR" || user?.role === "Admin" || user?.type === "Manager") && (
                   <li
                     className={activePage === "advanceSalaryReport" ? "active-sub" : ""}
                     onClick={(e) => { e.stopPropagation(); setActivePage("advanceSalaryReport"); }}

@@ -9,13 +9,13 @@ import {
   UserCheck, 
   Loader2,
   Users,
-  Fingerprint,
   Activity,
     UserPlus,
     Scan
 } from "lucide-react";
 import { faceXAPI, branchAPI, departmentAPI } from "../../services/apiService";
 import { toast } from "../../components/Toast";
+import "./UserFaceData.css";
 
 interface UserFaceDataProps {
     setActivePage?: (page: string) => void;
@@ -79,16 +79,11 @@ const UserFaceData: React.FC<UserFaceDataProps> = ({ setActivePage }) => {
     };
 
     return (
-        <div className="main-content animate-fade-in">
-            <div className="page-header" style={{ marginBottom: "24px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                   <div style={{ padding: "12px", background: "rgba(99, 102, 241, 0.1)", borderRadius: "12px" }}>
-                       <Fingerprint size={28} color="var(--primary)" />
-                   </div>
-                   <div>
-                        <h1 className="page-title"><Scan size={22} /> Biometric Face Registry</h1>
-                        <p className="page-subtitle">Repository of all employee facial identity data captured via mobile/tablet apps</p>
-                   </div>
+        <div className="main-content animate-fade-in fx-bio-page">
+            <div className="page-header fx-page-header">
+                <div>
+                    <h1 className="page-title"><Scan size={22} /> Biometric Face Registry</h1>
+                    <p className="page-subtitle">Repository of all employee facial identity data captured via mobile/tablet apps</p>
                 </div>
             </div>
 

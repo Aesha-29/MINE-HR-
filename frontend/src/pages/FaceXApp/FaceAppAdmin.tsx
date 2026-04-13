@@ -1,22 +1,22 @@
 ﻿import React, { useState, useEffect } from "react";
-import { 
-  Plus, 
-  Trash2, 
-  Eye, 
-  ToggleLeft, 
-  ToggleRight,
-  Search,
-  Loader2,
-  Users,
-  ShieldCheck,
-  UserPlus,
-  Activity,
-  RefreshCw,
-  Scan
+import {
+    Plus,
+    Trash2,
+    Eye,
+    ToggleLeft,
+    ToggleRight,
+    Search,
+    Loader2,
+    ShieldCheck,
+    UserPlus,
+    Activity,
+    RefreshCw,
+    Scan
 } from "lucide-react";
 import { faceXAPI, managerAPI } from "../../services/apiService";
 import { toast } from "../../components/Toast";
 import PageTitle from "../../components/PageTitle";
+import "./FaceAppAdmin.css";
 
 interface FaceAppAdminProps {
     setActivePage?: (page: string) => void;
@@ -97,15 +97,10 @@ const FaceAppAdmin: React.FC<FaceAppAdminProps> = ({ setActivePage }) => {
     };
 
     return (
-        <div className="main-content animate-fade-in">
-            <div className="page-header" style={{ marginBottom: "24px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                   <div style={{ padding: "12px", background: "rgba(99, 102, 241, 0.1)", borderRadius: "12px" }}>
-                       <Users size={28} color="var(--primary)" />
-                   </div>
-                   <div>
-                        <PageTitle title="App Administration" subtitle="Manage administrative access and login credentials for the FaceX mobile application" />
-                   </div>
+        <div className="main-content animate-fade-in fx-admin-page">
+            <div className="page-header fx-page-header">
+                <div>
+                    <PageTitle title="App Administration" subtitle="Manage administrative access and login credentials for the FaceX mobile application" />
                 </div>
             </div>
 

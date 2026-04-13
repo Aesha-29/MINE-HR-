@@ -15,7 +15,7 @@ import {
   MessageCircle
 } from "lucide-react";
 import { pollAPI } from "../../services/apiService";
-import "./Poll.css";
+import "./PollSummary.css";
 
 const PollSummary = ({ setActivePage }: { setActivePage: (page: string) => void }) => {
   const [activeTab, setActiveTab] = useState<"Current" | "Past" | "Upcoming">("Current");
@@ -82,25 +82,25 @@ const PollSummary = ({ setActivePage }: { setActivePage: (page: string) => void 
       </div>
 
       <div className="poll-analytics-bar mt-4">
-        <div className="analytics-card active-polls">
-          <div className="a-icon"><MessageSquare size={20} /></div>
-          <div className="a-info">
-            <span className="a-label">Active Polls</span>
-            <span className="a-value">{polls.filter(p => p.status === 'Active').length.toString().padStart(2, '0')}</span>
+        <div className="poll-analytics-card active-polls">
+          <div className="poll-a-icon"><MessageSquare size={20} /></div>
+          <div className="poll-a-info">
+            <span className="poll-a-label">Active Polls</span>
+            <span className="poll-a-value">{polls.filter(p => p.status === 'Active').length.toString().padStart(2, '0')}</span>
           </div>
         </div>
-        <div className="analytics-card total-votes">
-          <div className="a-icon votes"><TrendingUp size={20} /></div>
-          <div className="a-info">
-            <span className="a-label">Total Votes Cast</span>
-            <span className="a-value">{totalVotes.toLocaleString()}</span>
+        <div className="poll-analytics-card total-votes">
+          <div className="poll-a-icon votes"><TrendingUp size={20} /></div>
+          <div className="poll-a-info">
+            <span className="poll-a-label">Total Votes Cast</span>
+            <span className="poll-a-value">{totalVotes.toLocaleString()}</span>
           </div>
         </div>
-        <div className="analytics-card completion-rate">
-          <div className="a-icon completion"><CheckCircle2 size={20} /></div>
-          <div className="a-info">
-            <span className="a-label">Avg. Response Rate</span>
-            <span className="a-value">82%</span>
+        <div className="poll-analytics-card completion-rate">
+          <div className="poll-a-icon completion"><CheckCircle2 size={20} /></div>
+          <div className="poll-a-info">
+            <span className="poll-a-label">Avg. Response Rate</span>
+            <span className="poll-a-value">82%</span>
           </div>
         </div>
       </div>
