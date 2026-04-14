@@ -153,37 +153,33 @@ function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user 
                   <span>All Employees</span>
                 </li>
 
-                {true && (
-                  <>
-                    <li
-                      className={activePage === "addEmployee" ? "active-sub" : ""}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (setSelectedEmployee) setSelectedEmployee(null);
-                        setActivePage("addEmployee");
-                      }}
-                    >
-                      <div className="sub-dot"></div>
-                      <span>Add Employee</span>
-                    </li>
+                <li
+                  className={activePage === "addEmployee" ? "active-sub" : ""}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (setSelectedEmployee) setSelectedEmployee(null);
+                    setActivePage("addEmployee");
+                  }}
+                >
+                  <div className="sub-dot"></div>
+                  <span>Add Employee</span>
+                </li>
 
-                    <li
-                      className={activePage === "onboarding" ? "active-sub" : ""}
-                      onClick={(e) => { e.stopPropagation(); setActivePage("onboarding"); }}
-                    >
-                      <div className="sub-dot"></div>
-                      <span>Onboarding</span>
-                    </li>
+                <li
+                  className={activePage === "onboarding" ? "active-sub" : ""}
+                  onClick={(e) => { e.stopPropagation(); setActivePage("onboarding"); }}
+                >
+                  <div className="sub-dot"></div>
+                  <span>Onboarding</span>
+                </li>
 
-                    <li
-                      className={activePage === "offboarding" ? "active-sub" : ""}
-                      onClick={(e) => { e.stopPropagation(); setActivePage("offboarding"); }}
-                    >
-                      <div className="sub-dot"></div>
-                      <span>Offboarding</span>
-                    </li>
-                  </>
-                )}
+                <li
+                  className={activePage === "offboarding" ? "active-sub" : ""}
+                  onClick={(e) => { e.stopPropagation(); setActivePage("offboarding"); }}
+                >
+                  <div className="sub-dot"></div>
+                  <span>Offboarding</span>
+                </li>
 
                 <li
                   className={activePage === "resignation" ? "active-sub" : ""}
@@ -193,69 +189,62 @@ function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user 
                   <span>Resignation</span>
                 </li>
 
-                {true && (
-                  <li
-                    className={activePage === "promotion" ? "active-sub" : ""}
-                    onClick={(e) => { e.stopPropagation(); setActivePage("promotion"); }}
-                  >
-                    <div className="sub-dot"></div>
-                    <span>Promotions</span>
-                  </li>
-                )}
+                <li
+                  className={activePage === "promotion" ? "active-sub" : ""}
+                  onClick={(e) => { e.stopPropagation(); setActivePage("promotion"); }}
+                >
+                  <div className="sub-dot"></div>
+                  <span>Promotions</span>
+                </li>
 
 
-                {true && (
-                  <>
+                <li
+                  className={activePage === "exEmployees" ? "active-sub" : ""}
+                  onClick={(e) => { e.stopPropagation(); setActivePage("exEmployees"); }}
+                >
+                  <div className="sub-dot"></div>
+                  <span>Ex Employees</span>
+                </li>
 
-                    <li
-                      className={activePage === "exEmployees" ? "active-sub" : ""}
-                      onClick={(e) => { e.stopPropagation(); setActivePage("exEmployees"); }}
-                    >
-                      <div className="sub-dot"></div>
-                      <span>Ex Employees</span>
-                    </li>
+                <li
+                  className={activePage === "upcomingRetirements" ? "active-sub" : ""}
+                  onClick={(e) => { e.stopPropagation(); setActivePage("upcomingRetirements"); }}
+                >
+                  <div className="sub-dot"></div>
+                  <span>Upcoming Retirements</span>
+                </li>
 
-                    <li
-                      className={activePage === "upcomingRetirements" ? "active-sub" : ""}
-                      onClick={(e) => { e.stopPropagation(); setActivePage("upcomingRetirements"); }}
-                    >
-                      <div className="sub-dot"></div>
-                      <span>Upcoming Retirements</span>
-                    </li>
+                <li
+                  className={activePage === "managers" ? "active-sub" : ""}
+                  onClick={(e) => { e.stopPropagation(); setActivePage("managers"); }}
+                >
+                  <div className="sub-dot"></div>
+                  <span>Managers / Admin</span>
+                </li>
 
-                    <li
-                      className={activePage === "managers" ? "active-sub" : ""}
-                      onClick={(e) => { e.stopPropagation(); setActivePage("managers"); }}
-                    >
-                      <div className="sub-dot"></div>
-                      <span>Managers / Admin</span>
-                    </li>
+                <li
+                  className={activePage === "managerRole" ? "active-sub" : ""}
+                  onClick={(e) => { e.stopPropagation(); setActivePage("managerRole"); }}
+                >
+                  <div className="sub-dot"></div>
+                  <span>Manager Role</span>
+                </li>
 
-                    <li
-                      className={activePage === "managerRole" ? "active-sub" : ""}
-                      onClick={(e) => { e.stopPropagation(); setActivePage("managerRole"); }}
-                    >
-                      <div className="sub-dot"></div>
-                      <span>Manager Role</span>
-                    </li>
+                <li
+                  className={activePage === "levelMaster" ? "active-sub" : ""}
+                  onClick={(e) => { e.stopPropagation(); setActivePage("levelMaster"); }}
+                >
+                  <div className="sub-dot"></div>
+                  <span>Level Master</span>
+                </li>
 
-                    <li
-                      className={activePage === "levelMaster" ? "active-sub" : ""}
-                      onClick={(e) => { e.stopPropagation(); setActivePage("levelMaster"); }}
-                    >
-                      <div className="sub-dot"></div>
-                      <span>Level Master</span>
-                    </li>
-
-                    <li
-                      className={activePage === "assignLevel" ? "active-sub" : ""}
-                      onClick={(e) => { e.stopPropagation(); setActivePage("assignLevel"); }}
-                    >
-                      <div className="sub-dot"></div>
-                      <span>Assign Level</span>
-                    </li>
-                  </>
-                )}
+                <li
+                  className={activePage === "assignLevel" ? "active-sub" : ""}
+                  onClick={(e) => { e.stopPropagation(); setActivePage("assignLevel"); }}
+                >
+                  <div className="sub-dot"></div>
+                  <span>Assign Level</span>
+                </li>
 
                 <li
                   className={activePage === "levelHierarchy" ? "active-sub" : ""}
@@ -274,17 +263,13 @@ function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user 
                   <span>Profile Change Requests</span>
                 </li>
 
-                {true && (
-                  <>
-                    <li
-                      className={activePage === "structureManagement" ? "active-sub" : ""}
-                      onClick={(e) => { e.stopPropagation(); setActivePage("structureManagement"); }}
-                    >
-                      <div className="sub-dot"></div>
-                      <span>Structure Management</span>
-                    </li>
-                  </>
-                )}
+                <li
+                  className={activePage === "structureManagement" ? "active-sub" : ""}
+                  onClick={(e) => { e.stopPropagation(); setActivePage("structureManagement"); }}
+                >
+                  <div className="sub-dot"></div>
+                  <span>Structure Management</span>
+                </li>
               </ul>
             )}
 
@@ -471,8 +456,7 @@ function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user 
             )}
 
             {/* Template Module Submenu */}
-            {true && (
-              <>
+            <>
                 <li
                   className={`${templateOpen ? "active-parent" : ""}`}
                   onClick={() => setTemplateOpen(!templateOpen)}
@@ -510,12 +494,10 @@ function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user 
                     </li>
                   </ul>
                 )}
-              </>
-            )}
+            </>
 
             {/* Order Product Module Submenu */}
-            {true && (
-              <>
+            <>
                 <li
                   className={`${orderProductOpen ? "active-parent" : ""}`}
                   onClick={() => setOrderProductOpen(!orderProductOpen)}
@@ -728,8 +710,7 @@ function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user 
                     </li>
                   </ul>
                 )}
-              </>
-            )}
+            </>
 
             {/* Expense Module */}
             <li
@@ -848,24 +829,22 @@ function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user 
                   <div className="sub-dot"></div>
                   <span>Advance Salary</span>
                 </li>
-                {true && (
-                  <>
-                    <li
-                      className={activePage === "bulkAdvanceSalary" ? "active-sub" : ""}
-                      onClick={(e) => { e.stopPropagation(); setActivePage("bulkAdvanceSalary"); }}
-                    >
-                      <div className="sub-dot"></div>
-                      <span>Bulk Advance Salary</span>
-                    </li>
-                    <li
-                      className={activePage === "advanceCarryForward" ? "active-sub" : ""}
-                      onClick={(e) => { e.stopPropagation(); setActivePage("advanceCarryForward"); }}
-                    >
-                      <div className="sub-dot"></div>
-                      <span>Carry Forward</span>
-                    </li>
-                  </>
-                )}
+                <>
+                  <li
+                    className={activePage === "bulkAdvanceSalary" ? "active-sub" : ""}
+                    onClick={(e) => { e.stopPropagation(); setActivePage("bulkAdvanceSalary"); }}
+                  >
+                    <div className="sub-dot"></div>
+                    <span>Bulk Advance Salary</span>
+                  </li>
+                  <li
+                    className={activePage === "advanceCarryForward" ? "active-sub" : ""}
+                    onClick={(e) => { e.stopPropagation(); setActivePage("advanceCarryForward"); }}
+                  >
+                    <div className="sub-dot"></div>
+                    <span>Carry Forward</span>
+                  </li>
+                </>
                 <li
                   className={activePage === "advanceSalaryRequests" ? "active-sub" : ""}
                   onClick={(e) => { e.stopPropagation(); setActivePage("advanceSalaryRequests"); }}
@@ -873,15 +852,13 @@ function Sidebar({ isOpen, setActivePage, activePage, setSelectedEmployee, user 
                   <div className="sub-dot"></div>
                   <span>Salary Requests</span>
                 </li>
-                {true && (
-                  <li
-                    className={activePage === "advanceSalaryReport" ? "active-sub" : ""}
-                    onClick={(e) => { e.stopPropagation(); setActivePage("advanceSalaryReport"); }}
-                  >
-                    <div className="sub-dot"></div>
-                    <span>Salary Report</span>
-                  </li>
-                )}
+                <li
+                  className={activePage === "advanceSalaryReport" ? "active-sub" : ""}
+                  onClick={(e) => { e.stopPropagation(); setActivePage("advanceSalaryReport"); }}
+                >
+                  <div className="sub-dot"></div>
+                  <span>Salary Report</span>
+                </li>
               </ul>
             )}
 
