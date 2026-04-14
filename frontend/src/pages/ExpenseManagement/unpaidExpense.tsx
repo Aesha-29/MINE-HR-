@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Wallet, IndianRupee, Search } from "lucide-react";
 import API_BASE from "../api";
+import { getCurrentUserId } from "../../utils/auth";
 
 export default function UnpaidExpense() {
     const [entries, setEntries] = useState<any[]>([]);
@@ -16,8 +17,10 @@ export default function UnpaidExpense() {
     };
 
     const markPaid = async (id: number) => {
+        const actorId = getCurrentUserId();
+        if (!actorId) return alert("Session expired. Please login again.");
         const mode = prompt("Payment mode? (Cash / Bank / UPI)") || "Cash";
-        try { await axios.put(`${API_BASE}/expense-entries/${id}/pay`, { paidBy: 1, paymentMode: mode }); load(); }
+        try { await axios.put(`${API_BASE}/expense-entries/${id}/pay`, { paidBy: actorId, paymentMode: mode }); load(); }
         catch (e: any) { alert(e.response?.data?.error || "Error"); }
     };
 

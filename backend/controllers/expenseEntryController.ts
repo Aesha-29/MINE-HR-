@@ -48,9 +48,10 @@ export const approveEntry = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const { approvedBy } = req.body;
+        if (!approvedBy) return res.status(400).json({ error: 'approvedBy is required' });
         const entry = await prisma.expenseEntry.update({
             where: { id: Number(id) },
-            data: { status: 'Approved', approvedBy: Number(approvedBy) || 1, approvedAt: new Date() }
+            data: { status: 'Approved', approvedBy: Number(approvedBy), approvedAt: new Date() }
         });
         res.json(entry);
     } catch (e: any) {
@@ -62,9 +63,10 @@ export const rejectEntry = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const { rejectedBy, rejectionNote } = req.body;
+        if (!rejectedBy) return res.status(400).json({ error: 'rejectedBy is required' });
         const entry = await prisma.expenseEntry.update({
             where: { id: Number(id) },
-            data: { status: 'Rejected', rejectedBy: Number(rejectedBy) || 1, rejectedAt: new Date(), rejectionNote }
+            data: { status: 'Rejected', rejectedBy: Number(rejectedBy), rejectedAt: new Date(), rejectionNote }
         });
         res.json(entry);
     } catch (e: any) {
@@ -76,9 +78,10 @@ export const markPaid = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const { paidBy, paymentMode, voucherNo } = req.body;
+        if (!paidBy) return res.status(400).json({ error: 'paidBy is required' });
         const entry = await prisma.expenseEntry.update({
             where: { id: Number(id) },
-            data: { status: 'Paid', paidBy: Number(paidBy) || 1, paidAt: new Date(), paymentMode, voucherNo }
+            data: { status: 'Paid', paidBy: Number(paidBy), paidAt: new Date(), paymentMode, voucherNo }
         });
         res.json(entry);
     } catch (e: any) {
@@ -90,9 +93,10 @@ export const bulkMarkPaid = async (req: Request, res: Response) => {
     try {
         const { ids, paymentMode, voucherNo, paidBy } = req.body;
         if (!Array.isArray(ids)) return res.status(400).json({ error: 'ids[] required' });
+        if (!paidBy) return res.status(400).json({ error: 'paidBy is required' });
         await prisma.expenseEntry.updateMany({
             where: { id: { in: ids.map(Number) }, status: 'Approved' },
-            data: { status: 'Paid', paidBy: Number(paidBy) || 1, paidAt: new Date(), paymentMode, voucherNo }
+            data: { status: 'Paid', paidBy: Number(paidBy), paidAt: new Date(), paymentMode, voucherNo }
         });
         res.json({ message: 'Marked as paid' });
     } catch (e: any) {

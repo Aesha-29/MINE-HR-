@@ -43,7 +43,7 @@ function Login({ onLogin }: LoginProps) {
             <div className="login-card">
                 <div className="login-header">
                     <h2>MineHR Solutions</h2>
-                    <p>Open sign-in access is enabled for now</p>
+                    <p>Sign in with your registered account</p>
                 </div>
 
                 {message && (
@@ -72,7 +72,7 @@ function Login({ onLogin }: LoginProps) {
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="••••••••"
                         />
-                        <div className="help-text">Any existing account or temporary identifier can be used for now.</div>
+                        <div className="help-text">Use your account password. If not set yet, register your password first.</div>
                     </div>
 
                     <button type="submit" disabled={loading} className="btn-login">

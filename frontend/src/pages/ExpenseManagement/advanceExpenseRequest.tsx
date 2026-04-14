@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { TrendingUp } from "lucide-react";
 import API_BASE from "../api";
+import { getCurrentUserId } from "../../utils/auth";
 
 export default function AdvanceExpenseRequest() {
     const [advances, setAdvances] = useState<any[]>([]);
@@ -32,7 +33,9 @@ export default function AdvanceExpenseRequest() {
     };
 
     const approve = async (id: number) => {
-        try { await axios.put(`${API_BASE}/expense-advances/${id}/approve`, { approvedBy: 1 }); loadData(); }
+        const actorId = getCurrentUserId();
+        if (!actorId) return alert("Session expired. Please login again.");
+        try { await axios.put(`${API_BASE}/expense-advances/${id}/approve`, { approvedBy: actorId }); loadData(); }
         catch (e: any) { alert(e.response?.data?.error); }
     };
 

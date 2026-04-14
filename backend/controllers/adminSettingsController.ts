@@ -112,3 +112,27 @@ export const saveOrderSettingsConfig = async (req: Request, res: Response) => {
   }
 };
 
+export const getTaskSettingsConfig = async (_req: Request, res: Response) => {
+  try {
+    const key = "task-global";
+    const record = await db.appSettingsConfig.findUnique({ where: { key } });
+    res.status(200).json(record?.payload || null);
+  } catch (error: any) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const saveTaskSettingsConfig = async (req: Request, res: Response) => {
+  try {
+    const key = "task-global";
+    const record = await db.appSettingsConfig.upsert({
+      where: { key },
+      update: { payload: req.body },
+      create: { key, payload: req.body },
+    });
+    res.status(200).json(record.payload);
+  } catch (error: any) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+

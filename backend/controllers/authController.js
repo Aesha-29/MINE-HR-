@@ -36,28 +36,22 @@ export const login = async (req, res) => {
             return;
         }
         const { user, type } = await findAuthUser(identifier);
-        if (!user) {
-            const token = jwt.sign({
-                id: 0,
-                email: identifier,
-                role: "Guest",
-                type: "Guest"
-            }, JWT_SECRET, { expiresIn: "12h" });
-            res.json({
-                message: "Login successful",
-                token,
-                user: {
-                    id: 0,
-                    name: identifier,
-                    email: identifier,
-                    role: "Guest",
-                    type: "Guest"
-                }
-            });
+        if (!user || !type) {
+            res.status(401).json({ error: "Invalid credentials." });
             return;
         }
         const storedPassword = user.password || "";
-        const isHashedPassword = storedPassword.startsWith("$2");
+        if (!storedPassword) {
+            res.status(403).json({ error: "Password is not set for this account. Please complete registration first." });
+            return;
+        }
+        const isPasswordValid = storedPassword.startsWith("$2")
+            ? await bcrypt.compare(password, storedPassword)
+            : storedPassword === password;
+        if (!isPasswordValid) {
+            res.status(401).json({ error: "Invalid credentials." });
+            return;
+        }
         const payload = {
             id: user.id,
             email: user.email || user.personalEmail || "",

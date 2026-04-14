@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  getCountries, createCountry, updateCountry, deleteCountry,
   getStates,
   getCities, createCity, updateCity, deleteCity,
   getAreas, createArea, updateArea, deleteArea,
@@ -8,6 +9,12 @@ import {
 } from '../controllers/geoController.js';
 
 const router = express.Router();
+
+// Countries
+router.get('/countries', getCountries);
+router.post('/countries', createCountry);
+router.put('/countries/:id', updateCountry);
+router.delete('/countries/:id', deleteCountry);
 
 // States
 router.get('/states', getStates);

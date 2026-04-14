@@ -35,13 +35,14 @@ export const approveAdvance = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const { approvedBy, adminRemark } = req.body;
+        if (!approvedBy) return res.status(400).json({ error: 'approvedBy is required' });
         const adv = await prisma.expenseAdvance.findUnique({ where: { id: Number(id) } });
         if (!adv) return res.status(404).json({ error: 'Not found' });
         const updated = await prisma.expenseAdvance.update({
             where: { id: Number(id) },
             data: {
                 status: 'Approved',
-                approvedBy: Number(approvedBy) || 1,
+                approvedBy: Number(approvedBy),
                 approvedAt: new Date(),
                 adminRemark,
                 remainingAmount: adv.requestedAmount

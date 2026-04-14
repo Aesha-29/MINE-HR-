@@ -21,7 +21,7 @@ import ProfileChangeRequests from "./pages/Employees/profileChangeRequests"; // 
 import StructureManagement from "./pages/Employees/structureManagement";
 import Resignation from "./pages/Employees/resignation";
 import Promotion from "./pages/Employees/promotion"; // NEW
-// import Login from "./pages/login"; // NEW
+import Login from "./pages/Auth/login";
 import AttendanceGrid from "./pages/Employees/attendanceGrid"; // NEW
 import PayrollDashboard from "./pages/Employees/payrollDashboard"; // NEW
 import BulkUpdate from "./pages/Employees/bulkUpdate"; // NEW
@@ -211,12 +211,11 @@ import ReportFoundItem from "./pages/LostAndFound/ReportFoundItem";
 import ManageLostAndFound from "./pages/LostAndFound/ManageLostAndFound";
 import ClaimVerification from "./pages/LostAndFound/ClaimVerification";
 import LostAndFoundReport from "./pages/LostAndFound/LostAndFoundReport";
+import { getStoredUser, isSessionAuthenticated } from "./utils/auth";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(true); // Bypassed login
-  const [currentUser, setCurrentUser] = useState<any>({
-    name: "Guest", role: "Admin"
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(() => isSessionAuthenticated());
+  const [currentUser, setCurrentUser] = useState<any>(() => getStoredUser());
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activePage, setActivePage] = useState("finance");
@@ -239,11 +238,7 @@ function App() {
     setIsSidebarOpen(!isSidebarOpen);
   };
   // 🔹 Global Notifications
-  const [notifications, setNotifications] = useState<any[]>([
-    { id: 1, text: "Leave Request Approved", time: "2h ago", type: "success" },
-    { id: 2, text: "New Policy: Health Insurance", time: "5h ago", type: "info" },
-    { id: 3, text: "Shift change request pending", time: "Yesterday", type: "warning" }
-  ]);
+  const [notifications, setNotifications] = useState<any[]>([]);
 
   const addNotification = (text: string, type: "success" | "info" | "warning" | "error" = "info") => {
     const newNotif = {
@@ -775,9 +770,17 @@ function App() {
     setCurrentUser(null);
   };
 
-  // if (!isAuthenticated) {
-  //   return <Login onLogin={handleLogin} />;
-  // }
+  const handleLogin = (token: string, user: any) => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    setCurrentUser(user);
+    setIsAuthenticated(true);
+  };
+
+  if (!isAuthenticated) {
+    return <Login onLogin={handleLogin} />;
+  }
 
   return (
     <div className="app-layout">

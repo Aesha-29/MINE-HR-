@@ -8,6 +8,7 @@ export default function ExpenseSettings() {
     const [branches, setBranches] = useState<any[]>([]);
     const [departments, setDepartments] = useState<any[]>([]);
     const [subDepartments, setSubDepartments] = useState<any[]>([]);
+    const [employees, setEmployees] = useState<any[]>([]);
     
     const [showForm, setShowForm] = useState(false);
     const [editingId, setEditingId] = useState<number | null>(null);
@@ -44,14 +45,19 @@ export default function ExpenseSettings() {
 
     const loadDropdownData = async () => {
         try {
-            const [bRes, dRes, sdRes] = await Promise.all([
+            const [bRes, dRes, eRes] = await Promise.all([
                 axios.get(`${API_BASE}/branches`),
                 axios.get(`${API_BASE}/departments`),
-                axios.get(`${API_BASE}/sub-departments`)
+                axios.get(`${API_BASE}/employees`)
             ]);
             setBranches(Array.isArray(bRes.data) ? bRes.data : bRes.data?.branches || []);
             setDepartments(Array.isArray(dRes.data) ? dRes.data : dRes.data?.departments || []);
-            setSubDepartments(Array.isArray(sdRes.data) ? sdRes.data : sdRes.data?.subDepartments || []);
+            const empList = Array.isArray(eRes.data) ? eRes.data : eRes.data?.employees || [];
+            setEmployees(empList);
+
+            const uniqueSubDepts = Array.from(new Set(empList.map((e: any) => String(e.subDepartment || "").trim()).filter(Boolean)))
+                .map((name) => ({ subDepartmentName: name }));
+            setSubDepartments(uniqueSubDepts);
         } catch (e) { console.error(e); }
     };
 
@@ -62,7 +68,7 @@ export default function ExpenseSettings() {
                 ...formData,
                 branchId: formData.branchId ? Number(formData.branchId) : null,
                 departmentId: formData.departmentId ? Number(formData.departmentId) : null,
-                subDepartmentId: formData.subDepartmentId ? Number(formData.subDepartmentId) : null,
+                subDepartmentId: formData.subDepartmentId ? formData.subDepartmentId : null,
                 maxBackdateDays: formData.maxBackdateDays ? Number(formData.maxBackdateDays) : null
             };
 
@@ -85,7 +91,7 @@ export default function ExpenseSettings() {
         setFormData({
             branchId: s.branchId?.toString() || "",
             departmentId: s.departmentId?.toString() || "",
-            subDepartmentId: s.subDepartmentId?.toString() || "",
+            subDepartmentId: s.subDepartment || "",
             isExpenseEnabled: s.isExpenseEnabled,
             hideExpenseTitle: s.hideExpenseTitle,
             dayTypeOption: s.dayTypeOption || "Default",
@@ -194,8 +200,11 @@ export default function ExpenseSettings() {
                                 <label className="input-label" style={{ fontWeight: 600 }}>Sub Department</label>
                                 <select className="select-modern" value={formData.subDepartmentId} onChange={e => setFormData({ ...formData, subDepartmentId: e.target.value })}>
                                     <option value="">-- Apply to All --</option>
-                                    {subDepartments.filter(sd => !formData.departmentId || sd.departmentId?.toString() === formData.departmentId).map(sd => (
-                                        <option key={sd.id} value={sd.id}>{sd.subDepartmentName}</option>
+                                    {subDepartments.filter(sd => {
+                                        if (!formData.departmentId) return true;
+                                        return employees.some((e: any) => String(e.departmentId || "") === formData.departmentId && e.subDepartment === sd.subDepartmentName);
+                                    }).map(sd => (
+                                        <option key={sd.subDepartmentName} value={sd.subDepartmentName}>{sd.subDepartmentName}</option>
                                     ))}
                                 </select>
                             </div>
@@ -306,7 +315,7 @@ export default function ExpenseSettings() {
                                                     {s.branch || s.department ? (
                                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                                                             <span style={{ fontWeight: 600 }}>{s.branch?.branchName || 'All Branches'}</span>
-                                                            <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{s.department?.departmentName || 'All Depts'} {s.subDepartment && `> ${s.subDepartment.subDepartmentName}`}</span>
+                                                            <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{s.department?.departmentName || 'All Depts'} {s.subDepartment && `> ${s.subDepartment}`}</span>
                                                         </div>
                                                     ) : (
                                                         <span className="badge badge-primary">GLOBAL POLICY</span>

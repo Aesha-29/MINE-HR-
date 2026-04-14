@@ -4,6 +4,7 @@ import API_BASE from "../api";
 import { CheckCircle, XCircle, Eye, Search, UserCog, Filter, AlertTriangle } from "lucide-react";
 import "./profileChangeRequests.css";
 import PageTitle from "../components/PageTitle";
+import { getCurrentUserId } from "../../utils/auth";
 
 interface EmployeeRef {
     id: number;
@@ -58,9 +59,11 @@ function ProfileChangeRequests() {
 
     const handleApprove = async () => {
         if (!selectedRequest) return;
+        const actorId = getCurrentUserId();
+        if (!actorId) return alert("Session expired. Please login again.");
         try {
             await axios.put(`${API_BASE}/profile-changes/${selectedRequest.id}/approve`, {
-                reviewedBy: 1 // TODO: Get logged in admin ID
+                reviewedBy: actorId
             });
             alert("Request approved successfully");
             setSelectedRequest(null);
@@ -73,9 +76,11 @@ function ProfileChangeRequests() {
     const handleReject = async () => {
         if (!selectedRequest) return;
         if (!rejectionReason) return alert("Please provide a rejection reason");
+        const actorId = getCurrentUserId();
+        if (!actorId) return alert("Session expired. Please login again.");
         try {
             await axios.put(`${API_BASE}/profile-changes/${selectedRequest.id}/reject`, {
-                reviewedBy: 1, // TODO: Get logged in admin ID
+                reviewedBy: actorId,
                 rejectionReason
             });
             alert("Request rejected");
@@ -236,7 +241,7 @@ function ProfileChangeRequests() {
                                         <span className="text-sm font-medium text-slate-700">{req.changeType}</span>
                                     </td>
                                     <td>
-                                        <span className={`status-badge !rounded-lg ${req.riskLevel.toLowerCase()}`}>
+                                        <span className={`status-badge rounded-lg! ${req.riskLevel.toLowerCase()}`}>
                                             {req.riskLevel}
                                         </span>
                                     </td>

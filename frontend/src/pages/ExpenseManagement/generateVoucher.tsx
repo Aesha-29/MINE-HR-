@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Printer, Search } from "lucide-react";
 import API_BASE from "../api";
+import { getCurrentUserId } from "../../utils/auth";
 
 export default function GenerateVoucher() {
     const [entries, setEntries] = useState<any[]>([]);
@@ -26,9 +27,11 @@ export default function GenerateVoucher() {
 
     const generate = async () => {
         if (selected.length === 0) return alert("Please select at least one expense.");
+        const actorId = getCurrentUserId();
+        if (!actorId) return alert("Session expired. Please login again.");
         const voucherNo = `VCH-${Date.now()}`;
         try {
-            await axios.put(`${API_BASE}/expense-entries/bulk/pay`, { ids: selected, paymentMode: form.paymentMode, voucherNo, paidBy: 1 });
+            await axios.put(`${API_BASE}/expense-entries/bulk/pay`, { ids: selected, paymentMode: form.paymentMode, voucherNo, paidBy: actorId });
             alert(`Voucher ${voucherNo} generated successfully for ₹${totalAmount.toLocaleString()}!`);
             setSelected([]); load();
         } catch (e: any) { alert(e.response?.data?.error || "Error"); }

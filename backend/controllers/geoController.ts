@@ -3,6 +3,61 @@ import getPrismaClient from '../config/db.js';
 
 const prisma = getPrismaClient();
 
+// ─── Countries ────────────────────────────────────────────
+export const getCountries = async (req: Request, res: Response) => {
+  try {
+    const countries = await prisma.country.findMany({
+      orderBy: { name: 'asc' }
+    });
+    res.json(countries);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const createCountry = async (req: Request, res: Response) => {
+  try {
+    const { name, status } = req.body;
+    if (!name) return res.status(400).json({ error: 'Country name is required' });
+
+    const country = await prisma.country.create({
+      data: {
+        name: String(name).trim(),
+        status: status || 'Active'
+      }
+    });
+    res.status(201).json(country);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+export const updateCountry = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { name, status } = req.body;
+    const country = await prisma.country.update({
+      where: { id: Number(id) },
+      data: {
+        ...(name !== undefined ? { name: String(name).trim() } : {}),
+        ...(status !== undefined ? { status } : {})
+      }
+    });
+    res.json(country);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+export const deleteCountry = async (req: Request, res: Response) => {
+  try {
+    await prisma.country.delete({ where: { id: Number(req.params.id) } });
+    res.json({ message: 'Country deleted' });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
 // ─── States ───────────────────────────────────────────────
 export const getStates = async (req: Request, res: Response) => {
   try {

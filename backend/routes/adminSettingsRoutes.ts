@@ -6,9 +6,11 @@ import {
   getAdminPermissionConfig,
   getAppSettingsConfig,
   getOrderSettingsConfig,
+  getTaskSettingsConfig,
   saveAdminPermissionConfig,
   saveAppSettingsConfig,
   saveOrderSettingsConfig,
+  saveTaskSettingsConfig,
 } from "../controllers/adminSettingsController.js";
 
 const router = express.Router();
@@ -25,5 +27,8 @@ router.put("/app-config", saveAppSettingsConfig);
 
 router.get("/order-config", getOrderSettingsConfig);
 router.put("/order-config", saveOrderSettingsConfig);
+
+router.get("/task-config", getTaskSettingsConfig);
+router.put("/task-config", saveTaskSettingsConfig);
 
 export default router;

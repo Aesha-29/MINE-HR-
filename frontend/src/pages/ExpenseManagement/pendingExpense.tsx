@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Clock, Check, X, Search } from "lucide-react";
 import API_BASE from "../api";
+import { getCurrentUserId } from "../../utils/auth";
 
 export default function PendingExpense() {
     const [entries, setEntries] = useState<any[]>([]);
@@ -17,11 +18,15 @@ export default function PendingExpense() {
     };
 
     const approve = async (id: number) => {
-        try { await axios.put(`${API_BASE}/expense-entries/${id}/approve`, { approvedBy: 1 }); load(); } catch (e: any) { alert(e.response?.data?.error || "Error"); }
+        const actorId = getCurrentUserId();
+        if (!actorId) return alert("Session expired. Please login again.");
+        try { await axios.put(`${API_BASE}/expense-entries/${id}/approve`, { approvedBy: actorId }); load(); } catch (e: any) { alert(e.response?.data?.error || "Error"); }
     };
     const reject = async (id: number) => {
+        const actorId = getCurrentUserId();
+        if (!actorId) return alert("Session expired. Please login again.");
         const note = prompt("Rejection reason (optional):");
-        try { await axios.put(`${API_BASE}/expense-entries/${id}/reject`, { rejectedBy: 1, rejectionNote: note }); load(); } catch (e: any) { alert(e.response?.data?.error || "Error"); }
+        try { await axios.put(`${API_BASE}/expense-entries/${id}/reject`, { rejectedBy: actorId, rejectionNote: note }); load(); } catch (e: any) { alert(e.response?.data?.error || "Error"); }
     };
 
     const filtered = entries.filter(e =>

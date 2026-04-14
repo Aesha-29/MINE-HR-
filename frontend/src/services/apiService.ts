@@ -448,6 +448,8 @@ export const adminSettingsAPI = {
   saveAppConfig: (data: ApiPayload) => apiClient.put('/admin-settings/app-config', data),
   getOrderConfig: () => apiClient.get('/admin-settings/order-config'),
   saveOrderConfig: (data: ApiPayload) => apiClient.put('/admin-settings/order-config', data),
+  getTaskConfig: () => apiClient.get('/admin-settings/task-config'),
+  saveTaskConfig: (data: ApiPayload) => apiClient.put('/admin-settings/task-config', data),
 };
 
 export default apiClient;
