@@ -211,7 +211,7 @@ import ReportFoundItem from "./pages/LostAndFound/ReportFoundItem";
 import ManageLostAndFound from "./pages/LostAndFound/ManageLostAndFound";
 import ClaimVerification from "./pages/LostAndFound/ClaimVerification";
 import LostAndFoundReport from "./pages/LostAndFound/LostAndFoundReport";
-import { getStoredUser, isSessionAuthenticated } from "./utils/auth";
+import { clearSession, getStoredUser, isSessionAuthenticated } from "./utils/auth";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => isSessionAuthenticated());
@@ -227,6 +227,29 @@ function App() {
       delete axios.defaults.headers.common["Authorization"];
     }
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    const interceptorId = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        const status = error?.response?.status;
+        const requestUrl = String(error?.config?.url || "");
+        const isAuthEndpoint = requestUrl.includes("/auth/login") || requestUrl.includes("/auth/register");
+        if (status === 401 && !isAuthEndpoint) {
+          window.dispatchEvent(
+            new CustomEvent("app:session-expired", {
+              detail: { message: "Your session has expired. Please login again." },
+            })
+          );
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    return () => {
+      axios.interceptors.response.eject(interceptorId);
+    };
+  }, []);
 
   // 🔹 NEW: store selected employee for view/edit
   const [selectedEmployee, setSelectedEmployee] = useState<any>(null);
@@ -263,12 +286,22 @@ function App() {
       if (text) addNotification(text, type || "info");
     };
 
+    const sessionExpiredHandler = (e: Event) => {
+      const detail = (e as CustomEvent<{ message?: string }>).detail;
+      clearSession();
+      setCurrentUser(null);
+      setIsAuthenticated(false);
+      if (detail?.message) addNotification(detail.message, "warning");
+    };
+
     window.addEventListener("app:navigate", navHandler);
     window.addEventListener("app:notification", notifHandler);
+    window.addEventListener("app:session-expired", sessionExpiredHandler);
     
     return () => {
       window.removeEventListener("app:navigate", navHandler);
       window.removeEventListener("app:notification", notifHandler);
+      window.removeEventListener("app:session-expired", sessionExpiredHandler);
     };
   }, []);
 
@@ -308,12 +341,8 @@ function App() {
         );
 
       case "viewEmployee":
-        return (
-          <ViewEmployee
-            selectedEmployee={selectedEmployee}
-            setActivePage={setActivePage}
-          />
-        );
+        if (!selectedEmployee) return <Employees setActivePage={setActivePage} setSelectedEmployee={setSelectedEmployee} />;
+        return <ViewEmployee selectedEmployee={selectedEmployee} setActivePage={setActivePage} />;
 
       case "onboarding":
         return <Onboarding addNotification={addNotification} />;
@@ -443,10 +472,12 @@ function App() {
         return <AddTemplate setActivePage={setActivePage} />;
       
       case "editTemplate":
-        return <AddTemplate id={selectedTemplate?.id} setActivePage={setActivePage} />;
+        if (!selectedTemplate?.id) return <Templates setActivePage={setActivePage} setSelectedTemplate={setSelectedTemplate} />;
+        return <AddTemplate id={selectedTemplate.id} setActivePage={setActivePage} />;
 
       case "manageTemplate":
-        return <ManageTemplate templateId={selectedTemplate?.id} setActivePage={setActivePage} />;
+        if (!selectedTemplate?.id) return <Templates setActivePage={setActivePage} setSelectedTemplate={setSelectedTemplate} />;
+        return <ManageTemplate templateId={selectedTemplate.id} setActivePage={setActivePage} />;
 
       case "manageTemplateQuestions":
         return <ManageTemplateQuestions />;
@@ -764,8 +795,7 @@ function App() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    clearSession();
     setIsAuthenticated(false);
     setCurrentUser(null);
   };

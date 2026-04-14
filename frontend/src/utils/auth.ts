@@ -28,3 +28,8 @@ export const isSessionAuthenticated = (): boolean => {
     const user = getStoredUser();
     return Boolean(token && user);
 };
+
+export const clearSession = (): void => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+};

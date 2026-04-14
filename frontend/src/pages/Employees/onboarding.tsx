@@ -53,36 +53,59 @@ function Onboarding({ addNotification }: OnboardingProps) {
 
     setSaving(true);
     try {
-      // 1. Create the Employee officially in the database
       let [firstName, ...lastNameArr] = employee.name.split(" ");
       let lastName = lastNameArr.join(" ");
+      let employeeCreated = false;
 
-      await axios.post(`${API_BASE}/employees`, {
-        employeeId: employee.employeeId,
-        firstName: firstName || employee.name,
-        lastName: lastName || "",
-        designation: employee.designation || "New Hire",
-        branch: employee.branch || "Head Office",
-        department: employee.departmentAccess || "General",
-        doj: employee.doj || new Date().toISOString().split('T')[0],
-        email: `${employee.employeeId}@company.com`,
-        mobile: "0000000000",
-        status: employee.status === "Completed" ? "Active" : "Onboarding",
-      });
+      // 1. Create Employee if it does not exist yet.
+      try {
+        await axios.post(`${API_BASE}/employees`, {
+          employeeId: employee.employeeId,
+          firstName: firstName || employee.name,
+          lastName: lastName || "",
+          designation: employee.designation || "New Hire",
+          branch: employee.branch || "Head Office",
+          department: employee.departmentAccess || "General",
+          doj: employee.doj || new Date().toISOString().split('T')[0],
+          email: `${employee.employeeId}@company.com`,
+          mobile: "0000000000",
+          status: employee.status === "Completed" ? "Active" : "Onboarding",
+        });
+        employeeCreated = true;
+      } catch (error: any) {
+        const status = error?.response?.status;
+        const message = String(error?.response?.data?.message || "").toLowerCase();
+        const isDuplicate = status === 409 || message.includes("already") || message.includes("duplicate") || message.includes("exists");
+        if (!isDuplicate) {
+          throw error;
+        }
+      }
 
-      // 2. Save Onboarding Metadata
+      // 2. Save onboarding metadata.
       await axios.post(`${API_BASE}/onboarding`, {
         employeeId: employee.employeeId,
         status: employee.status,
-        documentsSubmitted: true, // Simplified for this demo
+        documentsSubmitted: true,
         trainingCompleted: true,
         orientationDone: true,
       });
-      toast.success("Onboarding Details Saved & Employee Created Successfully! ✅");
+
+      if (employeeCreated) {
+        toast.success("Onboarding details saved and employee created successfully.");
+      } else {
+        toast.success("Onboarding details saved for existing employee.");
+      }
       addNotification(`New Employee Onboarded: ${employee.name}`, "success");
     } catch (error: any) {
       console.error("Error saving onboarding:", error);
-      toast.error(error.response?.data?.message || "Failed to save onboarding details.");
+      const status = error?.response?.status;
+      if (status === 401) {
+        toast.error("Session expired. Please login again.");
+      } else if (status === 400) {
+        toast.error(error?.response?.data?.message || "Invalid onboarding data. Please review inputs.");
+      } else {
+        toast.error(error?.response?.data?.message || "Failed to save onboarding details.");
+      }
     } finally {
       setSaving(false);
     }

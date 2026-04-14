@@ -1,5 +1,6 @@
 import axios from 'axios';
 import type { AxiosInstance } from 'axios';
+import { clearSession } from '../utils/auth';
 
 const API_BASE_URL = '/api';
 
@@ -13,6 +14,42 @@ const apiClient: AxiosInstance = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+let sessionExpiredNotified = false;
+
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers = config.headers || {};
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error?.response?.status;
+    const requestUrl = String(error?.config?.url || '');
+    const isAuthEndpoint = requestUrl.includes('/auth/login') || requestUrl.includes('/auth/register');
+
+    if (status === 401 && !isAuthEndpoint && !sessionExpiredNotified) {
+      sessionExpiredNotified = true;
+      clearSession();
+      window.dispatchEvent(
+        new CustomEvent('app:session-expired', {
+          detail: { message: 'Your session has expired. Please login again.' },
+        })
+      );
+
+      setTimeout(() => {
+        sessionExpiredNotified = false;
+      }, 1000);
+    }
+
+    return Promise.reject(error);
+  }
+);
 
 // Product Category APIs
 export const productCategoryAPI = {
